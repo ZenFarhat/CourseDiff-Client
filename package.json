@@ -1,16 +1,18 @@
 {
-  "name": "courseiff",
+  "name": "client-coursediff",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next dev",
+    "build": "dotenv -e .env.prod next build",
+    "start": "dotenv -e .env.dev next dev",
+    "start:prod": "dotenv -e .env.prod next dev",
     "lint": "next lint"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.4.5",
     "axios": "^0.27.2",
+    "dotenv-cli": "^5.1.0",
     "firebase": "^9.8.3",
     "formik": "^2.2.9",
     "monaco-editor": "^0.33.0",

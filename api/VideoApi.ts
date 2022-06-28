@@ -4,7 +4,7 @@ import { AxiosClient } from "./AxiosClient"
 
 export class VideoApi extends AxiosClient {
   constructor() {
-    super("http://localhost:3002/coursediff/")
+    super(process.env.NEXT_PUBLIC_BASE_URL!)
   }
 
   public async addVideo(post: VideosModel): Promise<void> {

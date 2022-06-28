@@ -1,9 +1,9 @@
-import { UserInterface } from "./../../server/src/interfaces/user.interface"
+import { UserInterface } from "../models/userCollectionModel.interface"
 import { AxiosClient } from "./AxiosClient"
 
 export class UserApi extends AxiosClient {
   constructor() {
-    super("http://localhost:3002/coursediff/")
+    super(process.env.NEXT_PUBLIC_BASE_URL!)
   }
 
   public async getProfile(post: { uid: string; displayName: string }): Promise<UserInterface> {

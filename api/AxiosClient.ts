@@ -6,7 +6,7 @@ export abstract class AxiosClient {
 
   public constructor(baseURL: string) {
     this.AxiosInstance = axios.create({
-      baseURL: baseURL,
+      baseURL: baseURL + "/coursediff/",
       timeout: 15000,
     })
 
