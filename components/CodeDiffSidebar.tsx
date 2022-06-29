@@ -8,13 +8,13 @@ import BasicButton from "./BasicButton"
 
 interface CodeDiffSidebarProps {
   files: FilesArrayModel[]
-  setCurrentCode: (value: string) => void
+  getFileInfo: (value: string) => void
 }
 
 const CodeDiffSidebar = (props: CodeDiffSidebarProps) => {
   const [fileName, setFileName] = useState("")
   const router = useRouter()
-  const { files, setCurrentCode } = props
+  const { files, getFileInfo } = props
 
   const { videoName } = router.query
 
@@ -45,7 +45,7 @@ const CodeDiffSidebar = (props: CodeDiffSidebarProps) => {
               className="w-full py-1 text-white cursor-pointer hover:bg-blue-800"
               key={i}
               onClick={() => {
-                setCurrentCode(item.fileName)
+                getFileInfo(item.fileName)
               }}
             >
               {item.fileName}

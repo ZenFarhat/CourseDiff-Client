@@ -10,7 +10,6 @@ import { UserInterface } from "../models/userCollectionModel.interface"
 import { modalHandler$, refreshDataSub$ } from "../rxjs"
 
 const Dashboard: NextPage = () => {
-  console.log(process.env)
   const { user } = useAuth()
   const [userVideos, setUserVideos] = useState<UserInterface>()
 

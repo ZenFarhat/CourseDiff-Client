@@ -5,30 +5,32 @@ import { FilesArrayModel } from "../../../../models/userCollectionModel.interfac
 import { DiffEditor } from "@monaco-editor/react"
 import CodeDiffSidebar from "../../../../components/CodeDiffSidebar"
 import { refreshDiffData$ } from "../../../../rxjs"
+import { FileApi } from "../../../../api/FileApi"
 
 const VideoDiffPage = () => {
   const [loading, setLoading] = useState(true)
   const [userData, setUserData] = useState<FilesArrayModel[]>()
-  const [code, setCode] = useState<string>()
+  const [file, setCurrentFile] = useState<FilesArrayModel>()
 
   const router = useRouter()
   const { userDisplayName, videoName } = router.query
 
   const videoApi = new VideoApi()
+  const fileApi = new FileApi()
 
   const handleGetVideo = () => {
     if (userDisplayName && videoName) {
       videoApi.getVideo(userDisplayName.toString(), encodeURIComponent(videoName.toString())).then((data) => {
         setUserData(data)
-        setCode(data[0].codeDiffs[0].codeDiff)
+        setCurrentFile(data[0])
       })
     }
   }
 
-  const setCurrentCode = (fileName: string) => {
+  const getFileInfo = (fileName: string) => {
     if (!userData) return
     const item = userData?.findIndex((item) => item.fileName === fileName)
-    setCode(userData[item].codeDiffs[0].codeDiff)
+    setCurrentFile(userData[item])
   }
 
   useEffect(() => {
@@ -58,10 +60,15 @@ const VideoDiffPage = () => {
 
   return (
     <div className="w-full h-full bg-gray-100 p-20">
-      <h1>{videoName}</h1>
+      <h1>
+        {file?.codeDiffs.map((item, i) => {
+          return <div key={i}>{item.timeStamp}</div>
+        })}
+      </h1>
+      <div></div>
       <div className="w-12/12 h-full mx-auto flex items-center justify-center">
-        <CodeDiffSidebar files={userData} setCurrentCode={setCurrentCode} />
-        <DiffEditor original={code} width="100%" height="100%" />
+        <CodeDiffSidebar files={userData} getFileInfo={getFileInfo} />
+        <DiffEditor original={file?.codeDiffs[0].codeDiff} width="100%" height="100%" />
       </div>
     </div>
   )

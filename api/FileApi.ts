@@ -10,4 +10,8 @@ export class FileApi extends AxiosClient {
   public async addFile(post: FilesArrayModel, videoName: string): Promise<VideosModel> {
     return (await this.AxiosInstance.post(`files/${encodeURIComponent(videoName)}`, post)).data
   }
+
+  public async addTimeStampToFile(post: FilesArrayModel, videoName: string, fileName: string): Promise<void> {
+    return (await this.AxiosInstance.post(`files/${encodeURIComponent(videoName)}/${fileName}`, post)).data
+  }
 }

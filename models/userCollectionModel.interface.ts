@@ -10,7 +10,7 @@ export interface FilesArrayModel {
 
 export interface VideosModel {
   videoName: string
-  codeDiffs: FilesArrayModel[]
+  files: FilesArrayModel[]
 }
 
 export interface UserInterface {
