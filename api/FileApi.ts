@@ -1,4 +1,4 @@
-import { FilesArrayModel, VideosModel } from "./../models/userCollectionModel.interface"
+import { FilesArrayModel, VideosModel, codeDiffModel } from "./../models/userCollectionModel.interface"
 import { UserInterface } from "./../models/userCollectionModel.interface"
 import { AxiosClient } from "./AxiosClient"
 
@@ -11,7 +11,7 @@ export class FileApi extends AxiosClient {
     return (await this.AxiosInstance.post(`files/${encodeURIComponent(videoName)}`, post)).data
   }
 
-  public async addTimeStampToFile(post: FilesArrayModel, videoName: string, fileName: string): Promise<void> {
+  public async addTimeStampToFile(post: codeDiffModel, videoName: string, fileName: string): Promise<void> {
     return (await this.AxiosInstance.post(`files/${encodeURIComponent(videoName)}/${fileName}`, post)).data
   }
 }

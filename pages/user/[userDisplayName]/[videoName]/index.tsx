@@ -6,11 +6,13 @@ import { DiffEditor } from "@monaco-editor/react"
 import CodeDiffSidebar from "../../../../components/CodeDiffSidebar"
 import { refreshDiffData$ } from "../../../../rxjs"
 import { FileApi } from "../../../../api/FileApi"
+import BasicButton from "../../../../components/BasicButton"
 
 const VideoDiffPage = () => {
   const [loading, setLoading] = useState(true)
   const [userData, setUserData] = useState<FilesArrayModel[]>()
   const [file, setCurrentFile] = useState<FilesArrayModel>()
+  const [timeStamp, setTimeStamp] = useState("")
 
   const router = useRouter()
   const { userDisplayName, videoName } = router.query
@@ -31,6 +33,13 @@ const VideoDiffPage = () => {
     if (!userData) return
     const item = userData?.findIndex((item) => item.fileName === fileName)
     setCurrentFile(userData[item])
+  }
+
+  const addTimeStamp = () => {
+    if (!videoName || !file) return
+    fileApi.addTimeStampToFile({ codeDiff: "", timeStamp: timeStamp }, encodeURIComponent(videoName.toString()), file?.fileName).then(() => {
+      refreshDiffData$.next(true)
+    })
   }
 
   useEffect(() => {
@@ -60,11 +69,19 @@ const VideoDiffPage = () => {
 
   return (
     <div className="w-full h-full bg-gray-100 p-20">
-      <h1>
+      <div>
         {file?.codeDiffs.map((item, i) => {
           return <div key={i}>{item.timeStamp}</div>
         })}
-      </h1>
+        <input
+          type="text"
+          placeholder="hh:mm:ss"
+          onChange={(e) => {
+            setTimeStamp(e.target.value)
+          }}
+        />
+        <BasicButton buttonText="Add Timestamp" onClick={addTimeStamp} />
+      </div>
       <div></div>
       <div className="w-12/12 h-full mx-auto flex items-center justify-center">
         <CodeDiffSidebar files={userData} getFileInfo={getFileInfo} />
