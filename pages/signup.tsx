@@ -15,10 +15,9 @@ const SignUp = () => {
   const router = useRouter()
   const handleSignUp = async () => {
     try {
-      userApi.checkIfUserExists(formik.values.displayName).then(() => {
-        signUp(formik.values).then(() => {
-          router.push("/dashboard")
-        })
+      await userApi.checkIfUserExists(formik.values.displayName)
+      signUp(formik.values).then(() => {
+        router.push("/dashboard")
       })
     } catch (err) {
       console.log(err)

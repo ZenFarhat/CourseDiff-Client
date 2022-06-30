@@ -18,7 +18,7 @@ const Dashboard: NextPage = () => {
 
   const fetchProfile = () => {
     if (!user) return
-    userApi.getProfile({ uid: user?.uid, displayName: user?.displayName }).then((data) => {
+    userApi.getProfile({ displayName: user.displayName }).then((data) => {
       setUserVideos(data)
       modalHandler$.next({ open: false, contents: <></> })
     })
@@ -31,8 +31,8 @@ const Dashboard: NextPage = () => {
   }
 
   useEffect(() => {
+    console.log(user?.displayName)
     fetchProfile()
-
     const refreshSub = refreshDataSub$.subscribe({
       next(value) {
         value && fetchProfile()

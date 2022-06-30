@@ -6,7 +6,7 @@ export class UserApi extends AxiosClient {
     super(process.env.NEXT_PUBLIC_BASE_URL!)
   }
 
-  public async getProfile(post: { uid: string; displayName: string }): Promise<UserInterface> {
+  public async getProfile(post: { displayName: string }): Promise<UserInterface> {
     return (await this.AxiosInstance.post("profile", post)).data
   }
 

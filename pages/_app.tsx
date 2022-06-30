@@ -6,7 +6,7 @@ import ProtectedRoute from "../components/ProtectedRoute"
 import DashboardLayout from "../components/DashboardLayout"
 import ModalLayout from "../components/ModalLayout"
 
-const noAuthRequired = ["/login", "/signup", "/", "/user"]
+const noAuthRequired = ["/login", "/signup", "/", "/user/"]
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter()
