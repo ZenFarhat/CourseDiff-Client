@@ -15,7 +15,7 @@ export class FileApi extends AxiosClient {
     return (await this.AxiosInstance.post(`files/${encodeURIComponent(videoName)}/${fileName}`, post)).data
   }
 
-  public async updateCodeAtTimeStamp(put: codeDiffModel, videoName: string, fileName: string): Promise<FilesArrayModel[]> {
+  public async updateCodeAtTimeStamp(put: codeDiffModel, videoName: string, fileName: string): Promise<FilesArrayModel> {
     return (await this.AxiosInstance.put(`files/${encodeURIComponent(videoName)}/${fileName}`, put)).data
   }
 }
