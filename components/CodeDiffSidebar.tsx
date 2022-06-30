@@ -2,7 +2,7 @@ import { useRouter } from "next/router"
 import React, { useState } from "react"
 import { FileApi } from "../api/FileApi"
 import { FilesArrayModel, VideosModel } from "../models/userCollectionModel.interface"
-import { refreshDiffData$ } from "../rxjs"
+import { refreshDataSub$, refreshDiffData$ } from "../rxjs"
 
 import BasicButton from "./BasicButton"
 
