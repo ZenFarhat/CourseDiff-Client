@@ -3,7 +3,6 @@ import { onAuthStateChanged } from "firebase/auth"
 import { auth } from "../firebase"
 
 import { UserDetailsModel } from "../models/userDetails.interface"
-import { UserLoginModel } from "../models/userLogin.interface"
 
 interface AuthContextProps {
   user: UserDetailsModel | null

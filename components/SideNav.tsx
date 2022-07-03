@@ -1,6 +1,6 @@
 import { useRouter } from "next/router"
 import React from "react"
-import { logout } from "../firebase/authUtils"
+import { logout } from "../firebase/auth"
 import BasicButton from "./BasicButton"
 
 const SideNav = () => {

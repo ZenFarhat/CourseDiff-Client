@@ -4,7 +4,7 @@ import React from "react"
 import AuthPageLayout from "../components/AuthPageLayout"
 import BasicButton from "../components/BasicButton"
 import FormInputField from "../components/FormInputField"
-import { signIn } from "../firebase/authUtils"
+import { signIn } from "../firebase/auth"
 import * as yup from "yup"
 import { emailValidation } from "../utils/validations"
 

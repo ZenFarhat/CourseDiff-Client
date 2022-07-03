@@ -1,5 +1,4 @@
 import React from "react"
-import { logout } from "../firebase/authUtils"
 import BasicButton from "./BasicButton"
 import SideNav from "./SideNav"
 
