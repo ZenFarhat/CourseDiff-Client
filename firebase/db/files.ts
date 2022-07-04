@@ -2,7 +2,7 @@ import { refreshDiffData$ } from "./../../rxjs/index"
 import { getUserInfo } from "./users"
 import { auth } from "./../index"
 import { db } from ".."
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore"
+import { doc, updateDoc } from "firebase/firestore"
 
 export const addFileToUser = async (videoName: string, fileName: string) => {
   if (!auth.currentUser) return

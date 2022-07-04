@@ -1,6 +1,6 @@
 import { codeDiffModel, UserInterface, VideosModel } from "./../../models/userCollectionModel.interface"
 import { refreshDataSub$, refreshDiffData$ } from "./../../rxjs/index"
-import { collection, doc, getDocs, updateDoc } from "firebase/firestore"
+import { collection, doc, getDocs, updateDoc, setDoc } from "firebase/firestore"
 import { db } from "./../index"
 import { auth } from "./../index"
 import { getUserInfo } from "./users"
@@ -56,8 +56,7 @@ export const updateVideo = async (fileName: string, videoName: string, data: cod
     const videoIndex = currentUser.videos.findIndex((item) => item.videoName === videoName)
     const fileIndex = currentUser.videos[videoIndex].files.findIndex((item) => item.fileName === fileName)
     currentUser.videos[videoIndex].files[fileIndex].codeDiffs = data
-    const userRef = doc(db, "users", auth.currentUser.uid)
-    await updateDoc(userRef, { currentUser })
+    await setDoc(doc(db, "users", auth.currentUser.uid), currentUser)
     refreshDiffData$.next(true)
   } catch (e) {
     console.log(e)

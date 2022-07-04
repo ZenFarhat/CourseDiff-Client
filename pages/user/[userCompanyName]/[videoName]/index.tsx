@@ -29,17 +29,25 @@ const VideoDiffPage = () => {
     await getVideoDetails(userCompanyName?.toString(), videoName.toString())
       .then((data) => {
         setVideo(data)
+        console.log(data)
       })
       .catch((e) => {
         console.log(e)
       })
   }
 
+  const setTimeStampCode = (timeStamp: string) => {
+    const newFileData = { ...video }
+    if (!newFileData.files) return
+    const foundCodeDiff = newFileData.files[fileIndex].codeDiffs.find((item) => item.timeStamp === timeStamp)
+    setCurrentCode(foundCodeDiff)
+  }
+
   const getFileInfo = (fileName: string) => {
     if (!video) return
-    const foundFileIndex = video.files?.findIndex((item) => item.fileName === fileName)
+    const newFileData = { ...video }
+    const foundFileIndex = newFileData.files?.findIndex((item) => item.fileName === fileName)
     setCurrentFileIndex(foundFileIndex)
-    setCurrentCode(video.files[fileIndex].codeDiffs[0])
   }
 
   const addTimeStamp = () => {
@@ -49,13 +57,17 @@ const VideoDiffPage = () => {
     setVideo(newFileData as VideosModel)
   }
 
-  const setTimeStampCode = (timeStamp: string) => {
-    const foundCodeDiff = video?.files[0].codeDiffs.find((item) => item.timeStamp === timeStamp)
-    setCurrentCode(foundCodeDiff)
+  const handleDiffChange = () => {
+    const newFileData = { ...video }
+    if (!newFileData.files) return
+    const timeStampIndex = newFileData?.files[fileIndex].codeDiffs.findIndex((item) => item.timeStamp === code?.timeStamp)
+    newFileData.files[fileIndex].codeDiffs[timeStampIndex].codeDiff = diffEditorRef.current?.getModifiedEditor().getValue() || ""
+    setVideo(newFileData as VideosModel)
   }
 
   const handleSave = async () => {
     if (!video || !videoName) return
+    handleDiffChange()
     await updateVideo(video?.files[fileIndex].fileName, videoName?.toString(), video.files[fileIndex].codeDiffs)
   }
 
