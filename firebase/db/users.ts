@@ -28,7 +28,6 @@ export const getUserInfo = async (id: string): Promise<UserInterface> => {
     const docRefNew = doc(db, "users", id)
     const docSnapNew = await getDoc(docRefNew)
 
-    console.log(docSnapNew.data())
     return docSnapNew.data() as UserInterface
   }
 }

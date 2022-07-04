@@ -1,17 +1,18 @@
 import { useRouter } from "next/router"
 import React, { useEffect, useRef, useState } from "react"
-import { codeDiffModel, FilesArrayModel } from "../../../../models/userCollectionModel.interface"
+import { codeDiffModel, FilesArrayModel, VideosModel } from "../../../../models/userCollectionModel.interface"
 import { DiffEditor, Monaco } from "@monaco-editor/react"
 import CodeDiffSidebar from "../../../../components/CodeDiffSidebar"
 import { refreshDiffData$ } from "../../../../rxjs"
 import BasicButton from "../../../../components/BasicButton"
 import TimeStampButton from "../../../../components/TimeStampButton"
 import * as monaco from "monaco-editor"
+import { getVideoDetails } from "../../../../firebase/db/videos"
 
 const VideoDiffPage = () => {
-  const [userData, setUserData] = useState<FilesArrayModel[]>()
   const [file, setCurrentFile] = useState<FilesArrayModel>()
   const [code, setCurrentCode] = useState<codeDiffModel>()
+  const [video, setVideo] = useState<VideosModel | null>()
   const [timeStamp, setTimeStamp] = useState("")
   const diffEditorRef = useRef<monaco.editor.IStandaloneDiffEditor | null>(null)
 
@@ -22,16 +23,9 @@ const VideoDiffPage = () => {
   const router = useRouter()
   const { userCompanyName, videoName } = router.query
 
-  const handleGetVideo = () => {
-    if (userCompanyName && videoName) {
-      return
-    }
-    return
-  }
-
   const getFileInfo = (fileName: string) => {
-    if (!userData) return
-    const item = userData?.find((item) => item.fileName === fileName)
+    if (!video) return
+    const item = video.files?.find((item) => item.fileName === fileName)
     setCurrentFile(item)
     setCurrentCode(item?.codeDiffs[0])
   }
@@ -41,6 +35,18 @@ const VideoDiffPage = () => {
   const setTimeStampCode = (timeStamp: string) => {
     const foundCodeDiff = file?.codeDiffs.find((item) => item.timeStamp === timeStamp)
     setCurrentCode(foundCodeDiff)
+  }
+
+  const handleGetVideo = async () => {
+    if (!userCompanyName || !videoName) return
+    await getVideoDetails(userCompanyName?.toString(), videoName.toString())
+      .then((data) => {
+        console.log(data)
+        setVideo(data)
+      })
+      .catch((e) => {
+        console.log(e)
+      })
   }
 
   const saveCodeAtTimeStamp = () => {}
@@ -56,14 +62,6 @@ const VideoDiffPage = () => {
 
     return () => sub.unsubscribe()
   }, [])
-
-  if (!userData) {
-    return (
-      <div className="w-full h-full flex items-center justify-center">
-        <p className="text-2xl">{"Data not found :("}</p>
-      </div>
-    )
-  }
 
   return (
     <div className="w-full h-full bg-gray-100 p-14">
@@ -86,7 +84,7 @@ const VideoDiffPage = () => {
         Editing: {file?.fileName} at {code?.timeStamp}
       </div>
       <div className="w-12/12 h-5/6 mx-auto flex items-center justify-center">
-        <CodeDiffSidebar files={userData} getFileInfo={getFileInfo} />
+        <CodeDiffSidebar files={video?.files || null} getFileInfo={getFileInfo} />
         <DiffEditor original={code?.codeDiff} width="100%" height="100%" theme="vs-dark" language={`${file?.fileName.substring(file.fileName.indexOf(".") + 1)}`} onMount={handleEditorDidMount} />
       </div>
       <div className="w-full flex items-end justify-end">

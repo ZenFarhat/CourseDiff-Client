@@ -1,5 +1,6 @@
+import { UserInterface, VideosModel } from "./../../models/userCollectionModel.interface"
 import { refreshDataSub$ } from "./../../rxjs/index"
-import { doc, updateDoc } from "firebase/firestore"
+import { collection, doc, getDocs, updateDoc } from "firebase/firestore"
 import { db } from "./../index"
 import { auth } from "./../index"
 import { getUserInfo } from "./users"
@@ -31,4 +32,19 @@ export const addVideo = async (videoName: string) => {
   } catch (e) {
     console.log(e)
   }
+}
+
+export const getVideoDetails = async (companyName: string, videoName: string): Promise<VideosModel | undefined> => {
+  const querySnapshot = await getDocs(collection(db, "users"))
+
+  let foundData: VideosModel | undefined
+
+  querySnapshot.forEach((doc) => {
+    if (doc.data().companyName === companyName) {
+      const data = doc.data() as UserInterface
+      foundData = data.videos.find((item) => item.videoName === videoName)
+    }
+  })
+
+  return foundData
 }
