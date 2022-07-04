@@ -20,10 +20,10 @@ const VideoDiffPage = () => {
   }
 
   const router = useRouter()
-  const { userDisplayName, videoName } = router.query
+  const { userCompanyName, videoName } = router.query
 
   const handleGetVideo = () => {
-    if (userDisplayName && videoName) {
+    if (userCompanyName && videoName) {
       return
     }
     return

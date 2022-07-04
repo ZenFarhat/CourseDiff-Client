@@ -15,7 +15,7 @@ const VideoDashboardTile = (props: VideoDashboardTileProps) => {
   const router = useRouter()
 
   const handleVideoClick = () => {
-    router.push(`/user/${user?.displayName}/${encodeURIComponent(videoName)}`)
+    router.push(`/user/${user?.companyName}/${encodeURIComponent(videoName)}`)
   }
 
   return (

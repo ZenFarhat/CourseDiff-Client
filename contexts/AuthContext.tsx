@@ -7,6 +7,7 @@ import { getUserInfo } from "../firebase/db"
 
 interface AuthContextProps {
   user: UserDetailsModel | null
+  updateCompanyContext: (value: string) => void
 }
 
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps)
@@ -22,6 +23,7 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
           uid: user.uid,
           email: user.email || "",
           displayName: user.displayName || "",
+          companyName: "",
         })
         await getUserInfo(user.uid)
       } else {
@@ -34,7 +36,12 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
     return () => unsubscribe()
   }, [])
 
-  return <AuthContext.Provider value={{ user }}>{loading ? null : children}</AuthContext.Provider>
+  const updateCompanyContext = (name: string) => {
+    if (!user) return
+    setUser({ ...user, companyName: name })
+  }
+
+  return <AuthContext.Provider value={{ user, updateCompanyContext }}>{loading ? null : children}</AuthContext.Provider>
 }
 
 export const useAuth = () => useContext(AuthContext)

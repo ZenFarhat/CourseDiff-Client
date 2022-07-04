@@ -10,7 +10,7 @@ import { UserInterface } from "../models/userCollectionModel.interface"
 import { modalHandler$, refreshDataSub$ } from "../rxjs"
 
 const Dashboard: NextPage = () => {
-  const { user } = useAuth()
+  const { user, updateCompanyContext } = useAuth()
   const [userVideos, setUserVideos] = useState<UserInterface>()
   const [companyName, setCompanyName] = useState("")
 
@@ -19,6 +19,8 @@ const Dashboard: NextPage = () => {
     getUserInfo(user?.uid)
       .then((data) => {
         setUserVideos(data)
+        if (!data.companyName) return
+        updateCompanyContext(data.companyName)
       })
       .catch((e) => {
         console.log(e)
