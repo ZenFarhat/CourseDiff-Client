@@ -29,7 +29,6 @@ const VideoDiffPage = () => {
     await getVideoDetails(userCompanyName?.toString(), videoName.toString())
       .then((data) => {
         setVideo(data)
-        console.log(data)
       })
       .catch((e) => {
         console.log(e)
