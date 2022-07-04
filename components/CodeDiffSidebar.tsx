@@ -1,4 +1,3 @@
-import { useRouter } from "next/router"
 import React, { useState } from "react"
 import { FilesArrayModel } from "../models/userCollectionModel.interface"
 
@@ -14,7 +13,6 @@ const CodeDiffSidebar = (props: CodeDiffSidebarProps) => {
   const { files, getFileInfo } = props
 
   const addFile = () => {}
-  console.log(files)
 
   return (
     <div className="w-1/6 bg-blue-900 h-full p-2">
