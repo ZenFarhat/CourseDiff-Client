@@ -1,7 +1,5 @@
 import type { NextPage } from "next"
 import { useEffect, useState } from "react"
-import { UserApi } from "../api/UserApi"
-import { VideoApi } from "../api/VideoApi"
 import BasicButton from "../components/BasicButton"
 import SubmitVideoForm from "../components/SubmitVideoForm"
 import VideoDashboardTile from "../components/VideoDashboardTile"
@@ -13,22 +11,9 @@ const Dashboard: NextPage = () => {
   const { user } = useAuth()
   const [userVideos, setUserVideos] = useState<UserInterface>()
 
-  const userApi = new UserApi()
-  const videoApi = new VideoApi()
+  const fetchProfile = () => {}
 
-  const fetchProfile = () => {
-    if (!user) return
-    userApi.getProfile({ displayName: user.displayName }).then((data) => {
-      setUserVideos(data)
-      modalHandler$.next({ open: false, contents: <></> })
-    })
-  }
-
-  const handleDelete = async (videoName: string) => {
-    await videoApi.deleteVideo(videoName).then(() => {
-      refreshDataSub$.next(true)
-    })
-  }
+  const handleDelete = async (videoName: string) => {}
 
   useEffect(() => {
     console.log(user?.displayName)

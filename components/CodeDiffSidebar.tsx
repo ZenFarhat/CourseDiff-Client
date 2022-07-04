@@ -1,8 +1,6 @@
 import { useRouter } from "next/router"
 import React, { useState } from "react"
-import { FileApi } from "../api/FileApi"
-import { FilesArrayModel, VideosModel } from "../models/userCollectionModel.interface"
-import { refreshDataSub$, refreshDiffData$ } from "../rxjs"
+import { FilesArrayModel } from "../models/userCollectionModel.interface"
 
 import BasicButton from "./BasicButton"
 
@@ -18,14 +16,7 @@ const CodeDiffSidebar = (props: CodeDiffSidebarProps) => {
 
   const { videoName } = router.query
 
-  const fileApi = new FileApi()
-
-  const addFile = () => {
-    if (!videoName) return
-    fileApi.addFile({ fileName: fileName, codeDiffs: [{ timeStamp: "0:00", codeDiff: "" }] }, videoName.toString()).then(() => {
-      refreshDiffData$.next(true)
-    })
-  }
+  const addFile = () => {}
 
   return (
     <div className="w-1/6 bg-blue-900 h-full p-2">

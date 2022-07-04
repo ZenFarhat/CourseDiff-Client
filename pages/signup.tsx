@@ -7,15 +7,11 @@ import * as yup from "yup"
 import { signUp } from "../firebase/auth"
 import { displayNameValidation, emailValidation, passwordConfirmValidation, passwordValidation } from "../utils/validations"
 import { useRouter } from "next/router"
-import { UserApi } from "../api/UserApi"
 
 const SignUp = () => {
-  const userApi = new UserApi()
-
   const router = useRouter()
   const handleSignUp = async () => {
     try {
-      await userApi.checkIfUserExists(formik.values.displayName)
       signUp(formik.values).then(() => {
         router.push("/dashboard")
       })

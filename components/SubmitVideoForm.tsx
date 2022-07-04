@@ -6,17 +6,10 @@ import FormInputField from "./FormInputField"
 import * as yup from "yup"
 
 import { useAuth } from "../contexts/AuthContext"
-import { VideoApi } from "../api/VideoApi"
 import { refreshDataSub$ } from "../rxjs"
 
 const SubmitVideoForm = () => {
-  const videoAPi = new VideoApi()
-
-  const handleSubmit = () => {
-    videoAPi.addVideo({ videoName: formik.values.videoName, files: [{ fileName: "index.html", codeDiffs: [{ timeStamp: "0:00", codeDiff: "Hello World" }] }] }).then(() => {
-      refreshDataSub$.next(true)
-    })
-  }
+  const handleSubmit = () => {}
 
   const formik = useFormik({
     initialValues: {

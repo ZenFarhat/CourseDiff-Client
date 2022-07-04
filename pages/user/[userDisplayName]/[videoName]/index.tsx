@@ -1,11 +1,9 @@
 import { useRouter } from "next/router"
 import React, { useEffect, useRef, useState } from "react"
-import { VideoApi } from "../../../../api/VideoApi"
 import { codeDiffModel, FilesArrayModel } from "../../../../models/userCollectionModel.interface"
 import { DiffEditor, Monaco } from "@monaco-editor/react"
 import CodeDiffSidebar from "../../../../components/CodeDiffSidebar"
 import { refreshDiffData$ } from "../../../../rxjs"
-import { FileApi } from "../../../../api/FileApi"
 import BasicButton from "../../../../components/BasicButton"
 import TimeStampButton from "../../../../components/TimeStampButton"
 import * as monaco from "monaco-editor"
@@ -24,15 +22,11 @@ const VideoDiffPage = () => {
   const router = useRouter()
   const { userDisplayName, videoName } = router.query
 
-  const videoApi = new VideoApi()
-  const fileApi = new FileApi()
-
   const handleGetVideo = () => {
     if (userDisplayName && videoName) {
-      videoApi.getVideo(userDisplayName.toString(), encodeURIComponent(videoName.toString())).then((data) => {
-        setUserData(data)
-      })
+      return
     }
+    return
   }
 
   const getFileInfo = (fileName: string) => {
@@ -42,26 +36,14 @@ const VideoDiffPage = () => {
     setCurrentCode(item?.codeDiffs[0])
   }
 
-  const addTimeStamp = () => {
-    if (!videoName || !file) return
-    fileApi.addTimeStampToFile({ codeDiff: "", timeStamp: timeStamp }, encodeURIComponent(videoName.toString()), file?.fileName).then((data) => {
-      refreshDiffData$.next(true)
-      setCurrentFile(data)
-    })
-  }
+  const addTimeStamp = () => {}
 
   const setTimeStampCode = (timeStamp: string) => {
     const foundCodeDiff = file?.codeDiffs.find((item) => item.timeStamp === timeStamp)
     setCurrentCode(foundCodeDiff)
   }
 
-  const saveCodeAtTimeStamp = () => {
-    if (!videoName || !file || !code || !diffEditorRef.current) return
-    fileApi.updateCodeAtTimeStamp({ timeStamp: code?.timeStamp, codeDiff: diffEditorRef.current.getModifiedEditor().getValue() }, encodeURIComponent(videoName?.toString()), file?.fileName).then((data) => {
-      const foundCode = data.codeDiffs.find((item) => item.timeStamp === code.timeStamp)
-      setCurrentCode(foundCode)
-    })
-  }
+  const saveCodeAtTimeStamp = () => {}
 
   useEffect(() => {
     handleGetVideo()
