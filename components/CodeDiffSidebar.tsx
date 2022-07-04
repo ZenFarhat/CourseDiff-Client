@@ -1,4 +1,6 @@
+import { useRouter } from "next/router"
 import React, { useState } from "react"
+import { addFileToUser } from "../firebase/db/files"
 import { FilesArrayModel } from "../models/userCollectionModel.interface"
 
 import BasicButton from "./BasicButton"
@@ -10,9 +12,15 @@ interface CodeDiffSidebarProps {
 
 const CodeDiffSidebar = (props: CodeDiffSidebarProps) => {
   const [fileName, setFileName] = useState("")
+  const router = useRouter()
   const { files, getFileInfo } = props
 
-  const addFile = () => {}
+  const { videoName } = router.query
+
+  const addFile = async () => {
+    if (!videoName) return
+    await addFileToUser(videoName?.toString(), fileName)
+  }
 
   return (
     <div className="w-1/6 bg-blue-900 h-full p-2">

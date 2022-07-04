@@ -1,5 +1,5 @@
-import { UserInterface, VideosModel } from "./../../models/userCollectionModel.interface"
-import { refreshDataSub$ } from "./../../rxjs/index"
+import { codeDiffModel, UserInterface, VideosModel } from "./../../models/userCollectionModel.interface"
+import { refreshDataSub$, refreshDiffData$ } from "./../../rxjs/index"
 import { collection, doc, getDocs, updateDoc } from "firebase/firestore"
 import { db } from "./../index"
 import { auth } from "./../index"
@@ -47,4 +47,19 @@ export const getVideoDetails = async (companyName: string, videoName: string): P
   })
 
   return foundData
+}
+
+export const updateVideo = async (fileName: string, videoName: string, data: codeDiffModel[]) => {
+  if (!auth.currentUser) return
+  try {
+    const currentUser = await getUserInfo(auth.currentUser.uid)
+    const videoIndex = currentUser.videos.findIndex((item) => item.videoName === videoName)
+    const fileIndex = currentUser.videos[videoIndex].files.findIndex((item) => item.fileName === fileName)
+    currentUser.videos[videoIndex].files[fileIndex].codeDiffs = data
+    const userRef = doc(db, "users", auth.currentUser.uid)
+    await updateDoc(userRef, { currentUser })
+    refreshDiffData$.next(true)
+  } catch (e) {
+    console.log(e)
+  }
 }
