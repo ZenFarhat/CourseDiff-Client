@@ -5,18 +5,17 @@ import BasicButton from "./BasicButton"
 import FormInputField from "./FormInputField"
 import * as yup from "yup"
 
-import { useAuth } from "../contexts/AuthContext"
-import { refreshDataSub$ } from "../rxjs"
+import { addVideo } from "../firebase/db/videos"
+import { modalHandler$ } from "../rxjs"
 
 const SubmitVideoForm = () => {
-  const handleSubmit = () => {}
-
   const formik = useFormik({
     initialValues: {
       videoName: "",
     },
-    onSubmit: () => {
-      handleSubmit()
+    onSubmit: async () => {
+      await addVideo(formik.values.videoName)
+      modalHandler$.next({ open: false, contents: <></> })
     },
     validationSchema: yup.object({
       videoName: videoNameValidation,

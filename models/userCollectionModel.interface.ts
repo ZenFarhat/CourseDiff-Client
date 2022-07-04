@@ -16,5 +16,6 @@ export interface VideosModel {
 export interface UserInterface {
   uid: string
   displayName: string
+  companyName: string | null
   videos: VideosModel[]
 }

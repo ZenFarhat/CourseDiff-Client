@@ -4,19 +4,38 @@ import BasicButton from "../components/BasicButton"
 import SubmitVideoForm from "../components/SubmitVideoForm"
 import VideoDashboardTile from "../components/VideoDashboardTile"
 import { useAuth } from "../contexts/AuthContext"
+import { getUserInfo, updateCompanyName } from "../firebase/db"
+import { deleteVideo } from "../firebase/db/videos"
 import { UserInterface } from "../models/userCollectionModel.interface"
 import { modalHandler$, refreshDataSub$ } from "../rxjs"
 
 const Dashboard: NextPage = () => {
   const { user } = useAuth()
   const [userVideos, setUserVideos] = useState<UserInterface>()
+  const [companyName, setCompanyName] = useState("")
 
-  const fetchProfile = () => {}
+  const fetchProfile = () => {
+    if (!user) return
+    getUserInfo(user?.uid)
+      .then((data) => {
+        setUserVideos(data)
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+  }
 
-  const handleDelete = async (videoName: string) => {}
+  const updateCompany = async () => {
+    if (!user) return
+    try {
+      await updateCompanyName(user?.uid, companyName)
+      refreshDataSub$.next(true)
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
   useEffect(() => {
-    console.log(user?.displayName)
     fetchProfile()
     const refreshSub = refreshDataSub$.subscribe({
       next(value) {
@@ -41,11 +60,24 @@ const Dashboard: NextPage = () => {
           }}
         />
       </div>
-      <div className="w-full flex items-start flex-wrap">
-        {userVideos?.videos.map((video, i) => {
-          return <VideoDashboardTile videoName={video.videoName} key={i} deleteVideo={handleDelete} />
-        })}
-      </div>
+      {userVideos?.companyName ? (
+        <div className="w-full flex items-start flex-wrap">
+          {userVideos?.videos.map((video, i) => {
+            return <VideoDashboardTile videoName={video.videoName} key={i} deleteVideo={deleteVideo} />
+          })}
+        </div>
+      ) : (
+        <>
+          <p>{"Looks like you don't have a company name yet, please update it here: (note that this will appear on your diff urls')"}</p>
+          <input
+            type="text"
+            onChange={(e) => {
+              setCompanyName(e.target.value)
+            }}
+          />
+          <BasicButton onClick={updateCompany} buttonText="Update Company Name" />
+        </>
+      )}
     </div>
   )
 }

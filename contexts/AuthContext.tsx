@@ -3,6 +3,7 @@ import { onAuthStateChanged } from "firebase/auth"
 import { auth } from "../firebase"
 
 import { UserDetailsModel } from "../models/userDetails.interface"
+import { getUserInfo } from "../firebase/db"
 
 interface AuthContextProps {
   user: UserDetailsModel | null
@@ -15,13 +16,14 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setUser({
           uid: user.uid,
           email: user.email || "",
           displayName: user.displayName || "",
         })
+        await getUserInfo(user.uid)
       } else {
         setUser(null)
       }

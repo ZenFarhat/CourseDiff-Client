@@ -11,7 +11,7 @@ export const signUp = async (userSignUpDetailsModel: UserSignupDetailsModel) => 
   await createUserWithEmailAndPassword(auth, userSignUpDetailsModel.email, userSignUpDetailsModel.password)
   const currentUser = auth.currentUser
   if (currentUser) {
-    await updateProfile(currentUser, { displayName: userSignUpDetailsModel.displayName })
+    return await updateProfile(currentUser, { displayName: userSignUpDetailsModel.displayName })
   }
   return
 }
