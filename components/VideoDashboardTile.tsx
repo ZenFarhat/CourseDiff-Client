@@ -26,7 +26,7 @@ const VideoDashboardTile = (props: VideoDashboardTileProps) => {
       <BasicButton
         buttonText="Delete Video"
         onClick={() => {
-          deleteVideo(encodeURIComponent(videoName))
+          deleteVideo(videoName.toString())
         }}
       />
     </div>

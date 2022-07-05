@@ -11,13 +11,9 @@ import { useRouter } from "next/router"
 const SignUp = () => {
   const router = useRouter()
   const handleSignUp = async () => {
-    try {
-      signUp(formik.values).then(() => {
-        router.push("/dashboard")
-      })
-    } catch (err) {
-      console.log(err)
-    }
+    signUp(formik.values).then(() => {
+      router.push("/dashboard")
+    })
   }
 
   const formik = useFormik({

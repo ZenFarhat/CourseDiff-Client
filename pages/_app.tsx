@@ -5,6 +5,8 @@ import { useRouter } from "next/router"
 import ProtectedRoute from "../components/ProtectedRoute"
 import DashboardLayout from "../components/DashboardLayout"
 import ModalLayout from "../components/ModalLayout"
+import LoadingSpinner from "../components/LoadingSpinner"
+import SnackBar from "../components/SnackBar"
 
 const noAuthRequired = ["/login", "/signup", "/", "/user/"]
 
@@ -23,6 +25,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         </ProtectedRoute>
       )}
       <ModalLayout />
+      <LoadingSpinner />
+      <SnackBar />
     </AuthContextProvider>
   )
 }

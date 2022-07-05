@@ -1,5 +1,5 @@
 import { codeDiffModel, UserInterface, VideosModel } from "./../../models/userCollectionModel.interface"
-import { refreshDataSub$, refreshDiffData$ } from "./../../rxjs/index"
+import { refreshDataSub$, refreshDiffData$, snackbarHandler$ } from "./../../rxjs/index"
 import { collection, doc, getDocs, updateDoc, setDoc } from "firebase/firestore"
 import { db } from "./../index"
 import { auth } from "./../index"
@@ -14,8 +14,10 @@ export const deleteVideo = async (videoName: string) => {
     const userRef = doc(db, "users", auth.currentUser.uid)
     await updateDoc(userRef, { ...data })
     refreshDataSub$.next(true)
+    snackbarHandler$.next({ variant: "success", content: `Deleted video ${videoName}!` })
   } catch (e) {
     console.log(e)
+    snackbarHandler$.next({ variant: "error", content: `Error deleting video ${videoName}` })
   }
 }
 
@@ -29,8 +31,10 @@ export const addVideo = async (videoName: string) => {
     data.videos.push({ videoName: videoName, files: [{ fileName: "index.html", codeDiffs: [{ timeStamp: "0:00", codeDiff: "<h1>Hello World</h1>" }] }] })
     await updateDoc(userRef, { ...data })
     refreshDataSub$.next(true)
+    snackbarHandler$.next({ variant: "success", content: `Video ${videoName} added!` })
   } catch (e) {
     console.log(e)
+    snackbarHandler$.next({ variant: "error", content: `Error adding video` })
   }
 }
 
@@ -58,7 +62,9 @@ export const updateVideo = async (fileName: string, videoName: string, data: cod
     currentUser.videos[videoIndex].files[fileIndex].codeDiffs = data
     await setDoc(doc(db, "users", auth.currentUser.uid), currentUser)
     refreshDiffData$.next(true)
+    snackbarHandler$.next({ content: "Video saved!", variant: "success" })
   } catch (e) {
     console.log(e)
+    snackbarHandler$.next({ content: "Error saving the video.", variant: "error" })
   }
 }

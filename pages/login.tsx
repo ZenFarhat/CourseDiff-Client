@@ -25,13 +25,9 @@ const Login = () => {
   })
 
   const handleLogin = () => {
-    signIn(formik.values)
-      .then(() => {
-        router.push("/dashboard")
-      })
-      .catch((e) => {
-        console.log(e)
-      })
+    signIn(formik.values).then(() => {
+      router.push("/dashboard")
+    })
   }
 
   return (

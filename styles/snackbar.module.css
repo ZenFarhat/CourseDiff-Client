@@ -1,0 +1,14 @@
+.animateSnackbar {
+  animation: animateInDown 0.2s ease-in-out forwards;
+}
+
+@keyframes animateInDown {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(50%);
+    opacity: 1;
+  }
+}

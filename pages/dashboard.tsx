@@ -31,7 +31,6 @@ const Dashboard: NextPage = () => {
     if (!user) return
     try {
       await updateCompanyName(user?.uid, companyName)
-      refreshDataSub$.next(true)
     } catch (e) {
       console.log(e)
     }
@@ -55,12 +54,14 @@ const Dashboard: NextPage = () => {
         <div className="w-full h-1 bg-gray-900 rounded-full"></div>
       </div>
       <div className="my-5">
-        <BasicButton
-          buttonText="Add video"
-          onClick={() => {
-            modalHandler$.next({ open: true, contents: <SubmitVideoForm /> })
-          }}
-        />
+        {userVideos?.companyName && (
+          <BasicButton
+            buttonText="Add video"
+            onClick={() => {
+              modalHandler$.next({ open: true, contents: <SubmitVideoForm /> })
+            }}
+          />
+        )}
       </div>
       {userVideos?.companyName ? (
         <div className="w-full flex items-start flex-wrap">

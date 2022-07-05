@@ -1,6 +1,7 @@
 import { db } from ".."
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore"
 import { UserInterface } from "../../models/userCollectionModel.interface"
+import { loadingHandler$, refreshDataSub$ } from "../../rxjs"
 
 export const getUserInfo = async (id: string): Promise<UserInterface> => {
   const docRef = doc(db, "users", id)
@@ -33,8 +34,15 @@ export const getUserInfo = async (id: string): Promise<UserInterface> => {
 }
 
 export const updateCompanyName = async (id: string, companyName: string) => {
-  const userRef = doc(db, "users", id)
-  await updateDoc(userRef, {
-    companyName: companyName,
-  })
+  try {
+    loadingHandler$.next(true)
+    const userRef = doc(db, "users", id)
+    await updateDoc(userRef, {
+      companyName: companyName,
+    })
+    refreshDataSub$.next(true)
+    loadingHandler$.next(false)
+  } catch (e) {
+    loadingHandler$.next(false)
+  }
 }
