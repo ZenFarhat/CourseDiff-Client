@@ -1,4 +1,5 @@
 import type { NextPage } from "next"
+import { Spinner } from "phosphor-react"
 import { useEffect, useState } from "react"
 import BasicButton from "../components/BasicButton"
 import SubmitVideoForm from "../components/SubmitVideoForm"
@@ -7,12 +8,13 @@ import { useAuth } from "../contexts/AuthContext"
 import { getUserInfo, updateCompanyName } from "../firebase/db"
 import { deleteVideo } from "../firebase/db/videos"
 import { UserInterface } from "../models/userCollectionModel.interface"
-import { modalHandler$, refreshDataSub$ } from "../rxjs"
+import { loadingHandler$, modalHandler$, refreshDataSub$ } from "../rxjs"
 
 const Dashboard: NextPage = () => {
   const { user, updateCompanyContext } = useAuth()
   const [userVideos, setUserVideos] = useState<UserInterface>()
   const [companyName, setCompanyName] = useState("")
+  const [loading, setLoading] = useState(true)
 
   const fetchProfile = () => {
     if (!user) return
@@ -21,9 +23,11 @@ const Dashboard: NextPage = () => {
         setUserVideos(data)
         if (!data.companyName) return
         updateCompanyContext(data.companyName)
+        setLoading(false)
       })
       .catch((e) => {
         console.log(e)
+        setLoading(false)
       })
   }
 
@@ -46,6 +50,14 @@ const Dashboard: NextPage = () => {
 
     return () => refreshSub.unsubscribe()
   }, [])
+
+  if (loading) {
+    return (
+      <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+        <Spinner size={96} color="black" className="animate-spin" />
+      </div>
+    )
+  }
 
   return (
     <div className="w-full h-full bg-gray-100 p-20">
