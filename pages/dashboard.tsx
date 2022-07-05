@@ -23,11 +23,9 @@ const Dashboard: NextPage = () => {
         setUserVideos(data)
         if (!data.companyName) return
         updateCompanyContext(data.companyName)
-        setLoading(false)
       })
       .catch((e) => {
         console.log(e)
-        setLoading(false)
       })
   }
 
@@ -42,6 +40,7 @@ const Dashboard: NextPage = () => {
 
   useEffect(() => {
     fetchProfile()
+    setLoading(false)
     const refreshSub = refreshDataSub$.subscribe({
       next(value) {
         value && fetchProfile()
