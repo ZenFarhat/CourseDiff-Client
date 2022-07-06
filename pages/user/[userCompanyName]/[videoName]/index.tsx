@@ -8,12 +8,15 @@ import BasicButton from "../../../../components/BasicButton"
 import TimeStampButton from "../../../../components/TimeStampButton"
 import * as monaco from "monaco-editor"
 import { getVideoDetails, updateVideo } from "../../../../firebase/db/videos"
+import Dashboard from "../../../dashboard"
+import DashBoardLoader from "../../../../components/DashBoardLoader"
 
 const VideoDiffPage = () => {
   const [video, setVideo] = useState<VideosModel>()
   const [fileIndex, setCurrentFileIndex] = useState(0)
   const [code, setCurrentCode] = useState<codeDiffModel>()
   const [timeStamp, setTimeStamp] = useState("")
+  const [loading, setLoading] = useState(true)
 
   const diffEditorRef = useRef<monaco.editor.IStandaloneDiffEditor | null>(null)
 
@@ -29,9 +32,11 @@ const VideoDiffPage = () => {
     await getVideoDetails(userCompanyName?.toString(), videoName.toString())
       .then((data) => {
         setVideo(data)
+        setLoading(false)
       })
       .catch((e) => {
         console.log(e)
+        setLoading(false)
       })
   }
 
@@ -81,6 +86,10 @@ const VideoDiffPage = () => {
 
     return () => sub.unsubscribe()
   }, [])
+
+  if (loading) {
+    return <DashBoardLoader />
+  }
 
   return (
     <div className="w-full h-full bg-gray-100 p-14">

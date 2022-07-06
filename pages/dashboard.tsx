@@ -1,7 +1,8 @@
 import type { NextPage } from "next"
-import { Spinner } from "phosphor-react"
+
 import { useEffect, useState } from "react"
 import BasicButton from "../components/BasicButton"
+import DashBoardLoader from "../components/DashBoardLoader"
 import SubmitVideoForm from "../components/SubmitVideoForm"
 import VideoDashboardTile from "../components/VideoDashboardTile"
 import { useAuth } from "../contexts/AuthContext"
@@ -16,16 +17,18 @@ const Dashboard: NextPage = () => {
   const [companyName, setCompanyName] = useState("")
   const [loading, setLoading] = useState(true)
 
-  const fetchProfile = () => {
+  const fetchProfile = async () => {
     if (!user) return
     getUserInfo(user?.uid)
       .then((data) => {
         setUserVideos(data)
-        if (!data.companyName) return
+        if (!data.companyName) return setLoading(false)
         updateCompanyContext(data.companyName)
+        setLoading(false)
       })
       .catch((e) => {
         console.log(e)
+        setLoading(false)
       })
   }
 
@@ -40,7 +43,6 @@ const Dashboard: NextPage = () => {
 
   useEffect(() => {
     fetchProfile()
-    setLoading(false)
     const refreshSub = refreshDataSub$.subscribe({
       next(value) {
         value && fetchProfile()
@@ -51,11 +53,7 @@ const Dashboard: NextPage = () => {
   }, [])
 
   if (loading) {
-    return (
-      <div className="w-full h-full bg-gray-100 flex items-center justify-center">
-        <Spinner size={96} color="black" className="animate-spin" />
-      </div>
-    )
+    return <DashBoardLoader />
   }
 
   return (
