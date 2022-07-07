@@ -8,7 +8,6 @@ import BasicButton from "../../../../components/BasicButton"
 import TimeStampButton from "../../../../components/TimeStampButton"
 import * as monaco from "monaco-editor"
 import { getVideoDetails, updateVideo } from "../../../../firebase/db/videos"
-import Dashboard from "../../../dashboard"
 import DashBoardLoader from "../../../../components/DashBoardLoader"
 
 const VideoDiffPage = () => {
@@ -27,19 +26,6 @@ const VideoDiffPage = () => {
     diffEditorRef.current = editor
   }
 
-  const handleGetVideo = async () => {
-    if (!userCompanyName || !videoName) return
-    await getVideoDetails(userCompanyName?.toString(), videoName.toString())
-      .then((data) => {
-        setVideo(data)
-        setLoading(false)
-      })
-      .catch((e) => {
-        console.log(e)
-        setLoading(false)
-      })
-  }
-
   const setTimeStampCode = (timeStamp: string) => {
     const newFileData = { ...video }
     if (!newFileData.files) return
@@ -50,8 +36,9 @@ const VideoDiffPage = () => {
   const getFileInfo = (fileName: string) => {
     if (!video) return
     const newFileData = { ...video }
-    const foundFileIndex = newFileData.files?.findIndex((item) => item.fileName === fileName)
-    setCurrentFileIndex(foundFileIndex)
+    setCurrentFileIndex(newFileData.files.findIndex((item) => item.fileName === fileName))
+    const file = newFileData.files.find((item) => item.fileName === fileName)
+    setCurrentCode(file?.codeDiffs[0])
   }
 
   const addTimeStamp = () => {
@@ -62,11 +49,11 @@ const VideoDiffPage = () => {
   }
 
   const handleDiffChange = () => {
-    const newFileData = { ...video }
-    if (!newFileData.files) return
+    if (!video) return
+    const newFileData: VideosModel = { ...video }
     const timeStampIndex = newFileData?.files[fileIndex].codeDiffs.findIndex((item) => item.timeStamp === code?.timeStamp)
     newFileData.files[fileIndex].codeDiffs[timeStampIndex].codeDiff = diffEditorRef.current?.getModifiedEditor().getValue() || ""
-    setVideo(newFileData as VideosModel)
+    setVideo({ ...newFileData })
   }
 
   const handleSave = async () => {
@@ -75,9 +62,23 @@ const VideoDiffPage = () => {
     await updateVideo(video?.files[fileIndex].fileName, videoName?.toString(), video.files[fileIndex].codeDiffs)
   }
 
+  const handleGetVideo = async () => {
+    if (!userCompanyName || !videoName) return
+    await getVideoDetails(userCompanyName?.toString(), videoName.toString())
+      .then((data) => {
+        if (!data) return
+        setVideo(data)
+        setCurrentCode(data.files[fileIndex].codeDiffs[0])
+        setLoading(false)
+      })
+      .catch((e) => {
+        console.log(e)
+        setLoading(false)
+      })
+  }
+
   useEffect(() => {
     handleGetVideo()
-
     const sub = refreshDiffData$.subscribe({
       next(value) {
         value && handleGetVideo()

@@ -59,7 +59,7 @@ const Dashboard: NextPage = () => {
   return (
     <div className="w-full h-full bg-gray-100 p-20">
       <div>
-        <h1 className="text-4xl mb-5">Your Diffs</h1>
+        <h1 className="text-4xl mb-5">Your Videos</h1>
         <div className="w-full h-1 bg-gray-900 rounded-full"></div>
       </div>
       <div className="my-5">
