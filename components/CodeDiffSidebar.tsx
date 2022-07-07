@@ -4,6 +4,7 @@ import { addFileToUser } from "../firebase/db/files"
 import { FilesArrayModel } from "../models/userCollectionModel.interface"
 
 import BasicButton from "./BasicButton"
+import ComponentRequiresAuth from "./ComponentRequiresAuth"
 
 interface CodeDiffSidebarProps {
   files: FilesArrayModel[] | null
@@ -24,15 +25,17 @@ const CodeDiffSidebar = (props: CodeDiffSidebarProps) => {
 
   return (
     <div className="w-1/6 bg-blue-900 h-full p-2">
-      <div className="">
-        <input
-          className="w-3/6"
-          onChange={(e) => {
-            setFileName(e.target.value)
-          }}
-        />
-        <BasicButton buttonText="Add File" onClick={addFile} />
-      </div>
+      <ComponentRequiresAuth>
+        <div>
+          <input
+            className="w-3/6"
+            onChange={(e) => {
+              setFileName(e.target.value)
+            }}
+          />
+          <BasicButton buttonText="Add File" onClick={addFile} />
+        </div>
+      </ComponentRequiresAuth>
       <div>
         {files?.map((item, i) => {
           return (

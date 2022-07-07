@@ -9,6 +9,9 @@ import TimeStampButton from "../../../../components/TimeStampButton"
 import * as monaco from "monaco-editor"
 import { getVideoDetails, updateVideo } from "../../../../firebase/db/videos"
 import DashBoardLoader from "../../../../components/DashBoardLoader"
+import { useAuth } from "../../../../contexts/AuthContext"
+import ComponentRequiresAuth from "../../../../components/ComponentRequiresAuth"
+import DiffEditorAuthWrapper from "../../../../components/DiffEditorAuthWrapper"
 
 const VideoDiffPage = () => {
   const [video, setVideo] = useState<VideosModel>()
@@ -21,6 +24,7 @@ const VideoDiffPage = () => {
 
   const router = useRouter()
   const { userCompanyName, videoName } = router.query
+  const { user } = useAuth()
 
   const handleEditorDidMount = (editor: monaco.editor.IStandaloneDiffEditor, monaco: Monaco) => {
     diffEditorRef.current = editor
@@ -93,31 +97,41 @@ const VideoDiffPage = () => {
   }
 
   return (
-    <div className="w-full h-full bg-gray-100 p-14">
+    <div className="h-screen p-14 bg-gray-200">
       <div>
         <div className="flex w-full">
           {video?.files[fileIndex].codeDiffs.map((item, i) => {
             return <TimeStampButton text={item.timeStamp} onClick={setTimeStampCode} key={i} />
           })}
         </div>
-        <input
-          type="text"
-          onChange={(e) => {
-            setTimeStamp(e.target.value)
-          }}
-        />
-        <BasicButton buttonText="Add Timestamp" onClick={addTimeStamp} />
+        <ComponentRequiresAuth>
+          <input
+            type="text"
+            onChange={(e) => {
+              setTimeStamp(e.target.value)
+            }}
+          />
+          <BasicButton buttonText="Add Timestamp" onClick={addTimeStamp} />
+        </ComponentRequiresAuth>
       </div>
       <div>
-        Editing: {video?.files[fileIndex].fileName} at {code?.timeStamp}
+        {user ? "Editing" : "Viewing"}: {video?.files[fileIndex].fileName} at {code?.timeStamp}
       </div>
       <div className="w-12/12 h-5/6 mx-auto flex items-center justify-center">
         <CodeDiffSidebar files={video?.files || null} getFileInfo={getFileInfo} />
         <DiffEditor original={code?.codeDiff} width="100%" height="100%" theme="vs-dark" onMount={handleEditorDidMount} />
       </div>
-      <div className="w-full flex items-end justify-end">
-        <BasicButton buttonText={"Save Changes"} onClick={handleSave} />
-      </div>
+      <ComponentRequiresAuth>
+        <div className="w-full flex items-end justify-between">
+          <BasicButton
+            buttonText="Go back to dashboard"
+            onClick={() => {
+              router.push("/dashboard")
+            }}
+          />
+          <BasicButton buttonText={"Save Changes"} onClick={handleSave} />
+        </div>
+      </ComponentRequiresAuth>
     </div>
   )
 }

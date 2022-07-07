@@ -1,6 +1,6 @@
 import React from "react"
-import BasicButton from "./BasicButton"
 import SideNav from "./SideNav"
+import ComponentRequiresAuth from "./ComponentRequiresAuth"
 
 interface DashBoardLayoutProps {
   children: React.ReactNode

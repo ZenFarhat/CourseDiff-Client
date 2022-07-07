@@ -5,7 +5,6 @@ import { logout } from "../firebase/auth"
 import BasicButton from "./BasicButton"
 
 const SideNav = () => {
-  const router = useRouter()
   const { user } = useAuth()
   const [loading, setLoading] = useState(true)
 
@@ -23,12 +22,6 @@ const SideNav = () => {
         <div className="rounded-full w-32 h-32 bg-white"></div>
         <p className="text-white my-5 text-xl">Hey, {user?.displayName}</p>
       </div>
-      <BasicButton
-        buttonText="Go Back"
-        onClick={() => {
-          router.back()
-        }}
-      />
       <BasicButton buttonText="Log out" onClick={logout} />
     </div>
   )

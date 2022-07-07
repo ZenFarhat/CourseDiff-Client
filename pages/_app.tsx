@@ -7,8 +7,10 @@ import DashboardLayout from "../components/DashboardLayout"
 import ModalLayout from "../components/ModalLayout"
 import LoadingSpinner from "../components/LoadingSpinner"
 import SnackBar from "../components/SnackBar"
+import SideNav from "../components/SideNav"
+import ComponentRequiresAuth from "../components/ComponentRequiresAuth"
 
-const noAuthRequired = ["/login", "/signup", "/", "/user/"]
+const noAuthRequired = ["/login", "/signup", "/", "/user/[userCompanyName]/[videoName]"]
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter()
