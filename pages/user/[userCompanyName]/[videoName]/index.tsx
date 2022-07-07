@@ -11,7 +11,6 @@ import { getVideoDetails, updateVideo } from "../../../../firebase/db/videos"
 import DashBoardLoader from "../../../../components/DashBoardLoader"
 import { useAuth } from "../../../../contexts/AuthContext"
 import ComponentRequiresAuth from "../../../../components/ComponentRequiresAuth"
-import DiffEditorAuthWrapper from "../../../../components/DiffEditorAuthWrapper"
 
 const VideoDiffPage = () => {
   const [video, setVideo] = useState<VideosModel>()
@@ -97,7 +96,7 @@ const VideoDiffPage = () => {
   }
 
   return (
-    <div className="h-screen p-14 bg-gray-200">
+    <div className="h-screen p-8 bg-gray-200">
       <div>
         <div className="flex w-full">
           {video?.files[fileIndex].codeDiffs.map((item, i) => {
