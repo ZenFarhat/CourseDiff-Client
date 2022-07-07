@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react"
 import { codeDiffModel, VideosModel } from "../../../../models/userCollectionModel.interface"
 import { DiffEditor, Monaco } from "@monaco-editor/react"
 import CodeDiffSidebar from "../../../../components/CodeDiffSidebar"
-import { refreshDiffData$ } from "../../../../rxjs"
+import { refreshDiffData$, snackbarHandler$ } from "../../../../rxjs"
 import BasicButton from "../../../../components/BasicButton"
 import TimeStampButton from "../../../../components/TimeStampButton"
 import * as monaco from "monaco-editor"
@@ -80,6 +80,11 @@ const VideoDiffPage = () => {
       })
   }
 
+  const handleCopy = () => {
+    navigator.clipboard.writeText(window.location.href)
+    snackbarHandler$.next({ content: "Url copied!", variant: "success" })
+  }
+
   useEffect(() => {
     handleGetVideo()
     const sub = refreshDiffData$.subscribe({
@@ -121,14 +126,17 @@ const VideoDiffPage = () => {
         <DiffEditor original={code?.codeDiff} width="100%" height="100%" theme="vs-dark" onMount={handleEditorDidMount} />
       </div>
       <ComponentRequiresAuth>
-        <div className="w-full flex items-end justify-between">
+        <div className="w-full flex items-end justify-between mt-4">
           <BasicButton
             buttonText="Go back to dashboard"
             onClick={() => {
               router.push("/dashboard")
             }}
           />
-          <BasicButton buttonText={"Save Changes"} onClick={handleSave} />
+          <div>
+            <BasicButton buttonText="Share link" onClick={handleCopy} />
+            <BasicButton buttonText="Save Changes" onClick={handleSave} />
+          </div>
         </div>
       </ComponentRequiresAuth>
     </div>
