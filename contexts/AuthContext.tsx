@@ -17,17 +17,17 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
+    const unsubscribe = onAuthStateChanged(auth, async (authdUser) => {
+      if (authdUser) {
         setUser({
-          uid: user.uid,
-          email: user.email || "",
-          displayName: user.displayName || "",
+          uid: authdUser.uid,
+          displayName: authdUser.displayName || "",
           companyName: "",
         })
-        const userData = await getUserInfo(user.uid)
-        if (!userData.companyName) return
-        setUser({ ...user, companyName: userData.companyName })
+        await getUserInfo(authdUser.uid).then((data) => {
+          if (!data) return
+          setUser({ uid: data.uid, displayName: data.displayName, companyName: data.companyName })
+        })
       } else {
         setUser(null)
       }

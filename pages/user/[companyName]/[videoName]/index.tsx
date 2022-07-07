@@ -12,6 +12,7 @@ import DashBoardLoader from "../../../../components/DashBoardLoader"
 import { useAuth } from "../../../../contexts/AuthContext"
 import ComponentRequiresAuth from "../../../../components/ComponentRequiresAuth"
 import BasicButtonSmall from "../../../../components/BasicButtonSmall"
+import { getFileExtension } from "../../../../utils/getFileExtension"
 
 const VideoDiffPage = () => {
   const [video, setVideo] = useState<VideosModel>()
@@ -19,6 +20,7 @@ const VideoDiffPage = () => {
   const [code, setCurrentCode] = useState<codeDiffModel>()
   const [timeStamp, setTimeStamp] = useState("")
   const [searchValue, setSearchValue] = useState("")
+  const [codeLanguage, setCodeLanguage] = useState("")
   const [loading, setLoading] = useState(true)
 
   const diffEditorRef = useRef<monaco.editor.IStandaloneDiffEditor | null>(null)
@@ -44,6 +46,7 @@ const VideoDiffPage = () => {
     setCurrentFileIndex(newFileData.files.findIndex((item) => item.fileName === fileName))
     const file = newFileData.files.find((item) => item.fileName === fileName)
     setCurrentCode(file?.codeDiffs[0])
+    setCodeLanguage(getFileExtension(fileName) || "")
   }
 
   const addTimeStamp = () => {
@@ -74,6 +77,7 @@ const VideoDiffPage = () => {
       .then((data) => {
         if (!data) return
         setVideo(data)
+        setCodeLanguage(getFileExtension(data.files[0].fileName) || "")
         setCurrentCode(data.files[fileIndex].codeDiffs[data.files[fileIndex].codeDiffs.length - 1])
         setLoading(false)
       })
@@ -140,7 +144,7 @@ const VideoDiffPage = () => {
       </div>
       <div className="h-full flex items-center justify-center">
         <CodeDiffSidebar files={video?.files || null} getFileInfo={getFileInfo} />
-        <DiffEditor original={code?.codeDiff} width="100%" height="100%" theme="vs-dark" onMount={handleEditorDidMount} />
+        <DiffEditor original={code?.codeDiff} width="100%" height="100%" theme="vs-dark" onMount={handleEditorDidMount} language={codeLanguage} />
       </div>
       <ComponentRequiresAuth>
         <div className="w-full flex items-end justify-between mt-4">
