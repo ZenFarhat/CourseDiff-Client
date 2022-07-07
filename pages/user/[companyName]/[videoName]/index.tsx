@@ -11,12 +11,14 @@ import { getVideoDetails, updateVideo } from "../../../../firebase/db/videos"
 import DashBoardLoader from "../../../../components/DashBoardLoader"
 import { useAuth } from "../../../../contexts/AuthContext"
 import ComponentRequiresAuth from "../../../../components/ComponentRequiresAuth"
+import BasicButtonSmall from "../../../../components/BasicButtonSmall"
 
 const VideoDiffPage = () => {
   const [video, setVideo] = useState<VideosModel>()
   const [fileIndex, setCurrentFileIndex] = useState(0)
   const [code, setCurrentCode] = useState<codeDiffModel>()
   const [timeStamp, setTimeStamp] = useState("")
+  const [searchValue, setSearchValue] = useState("")
   const [loading, setLoading] = useState(true)
 
   const diffEditorRef = useRef<monaco.editor.IStandaloneDiffEditor | null>(null)
@@ -48,6 +50,7 @@ const VideoDiffPage = () => {
     const newFileData = { ...video }
     if (!newFileData.files) return
     newFileData.files[fileIndex].codeDiffs.push({ codeDiff: "", timeStamp: timeStamp })
+    setCurrentCode(newFileData.files[fileIndex].codeDiffs[newFileData.files[fileIndex].codeDiffs.length - 1])
     setVideo(newFileData as VideosModel)
   }
 
@@ -71,7 +74,7 @@ const VideoDiffPage = () => {
       .then((data) => {
         if (!data) return
         setVideo(data)
-        setCurrentCode(data.files[fileIndex].codeDiffs[0])
+        setCurrentCode(data.files[fileIndex].codeDiffs[data.files[fileIndex].codeDiffs.length - 1])
         setLoading(false)
       })
       .catch((e) => {
@@ -101,27 +104,41 @@ const VideoDiffPage = () => {
   }
 
   return (
-    <div className="h-screen p-8 bg-gray-200">
+    <div className="h-screen p-2 bg-gray-200 flex flex-col justify-around">
       <div>
-        <div className="flex w-full">
-          {video?.files[fileIndex].codeDiffs.map((item, i) => {
-            return <TimeStampButton text={item.timeStamp} onClick={setTimeStampCode} key={i} />
-          })}
-        </div>
-        <ComponentRequiresAuth>
+        <div className="mb-2">
           <input
             type="text"
+            placeholder="Search for a timestamp.."
+            className="w-10/12 rounded-xl p-2"
             onChange={(e) => {
-              setTimeStamp(e.target.value)
+              setSearchValue(e.target.value)
             }}
           />
-          <BasicButton buttonText="Add Timestamp" onClick={addTimeStamp} />
+        </div>
+        <ComponentRequiresAuth>
+          <div className="mb-2">
+            <input
+              type="text"
+              onChange={(e) => {
+                setTimeStamp(e.target.value)
+              }}
+              placeholder="Example: 1h20m30s or 1:00:00"
+              className="w-56 rounded-xl p-1"
+            />
+            <BasicButtonSmall buttonText="Add Timestamp" onClick={addTimeStamp} />
+          </div>
         </ComponentRequiresAuth>
+        <p>
+          {user ? "Editing" : "Viewing"}: {video?.files[fileIndex].fileName} at {code?.timeStamp}
+        </p>
+        <div className="flex w-full mb-2">
+          {video?.files[fileIndex].codeDiffs.map((item, i) => {
+            return item.timeStamp.includes(searchValue) ? <TimeStampButton text={item.timeStamp} onClick={setTimeStampCode} key={i} /> : null
+          })}
+        </div>
       </div>
-      <div>
-        {user ? "Editing" : "Viewing"}: {video?.files[fileIndex].fileName} at {code?.timeStamp}
-      </div>
-      <div className="w-12/12 h-5/6 mx-auto flex items-center justify-center">
+      <div className="h-full flex items-center justify-center">
         <CodeDiffSidebar files={video?.files || null} getFileInfo={getFileInfo} />
         <DiffEditor original={code?.codeDiff} width="100%" height="100%" theme="vs-dark" onMount={handleEditorDidMount} />
       </div>

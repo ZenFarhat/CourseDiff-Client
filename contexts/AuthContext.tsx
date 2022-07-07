@@ -25,7 +25,9 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
           displayName: user.displayName || "",
           companyName: "",
         })
-        await getUserInfo(user.uid)
+        const userData = await getUserInfo(user.uid)
+        if (!userData.companyName) return
+        setUser({ ...user, companyName: userData.companyName })
       } else {
         setUser(null)
       }
