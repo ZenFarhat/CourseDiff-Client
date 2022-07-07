@@ -22,7 +22,7 @@ const VideoDiffPage = () => {
   const diffEditorRef = useRef<monaco.editor.IStandaloneDiffEditor | null>(null)
 
   const router = useRouter()
-  const { userCompanyName, videoName } = router.query
+  const { companyName, videoName } = router.query
   const { user } = useAuth()
 
   const handleEditorDidMount = (editor: monaco.editor.IStandaloneDiffEditor, monaco: Monaco) => {
@@ -66,8 +66,8 @@ const VideoDiffPage = () => {
   }
 
   const handleGetVideo = async () => {
-    if (!userCompanyName || !videoName) return
-    await getVideoDetails(userCompanyName?.toString(), videoName.toString())
+    if (!companyName || !videoName) return
+    await getVideoDetails(companyName?.toString(), videoName.toString())
       .then((data) => {
         if (!data) return
         setVideo(data)

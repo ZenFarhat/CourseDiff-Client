@@ -10,7 +10,7 @@ import SnackBar from "../components/SnackBar"
 import SideNav from "../components/SideNav"
 import ComponentRequiresAuth from "../components/ComponentRequiresAuth"
 
-const noAuthRequired = ["/login", "/signup", "/", "/user/[userCompanyName]/[videoName]"]
+const noAuthRequired = ["/login", "/signup", "/", "/user/[companyName]/[videoName]"]
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter()
