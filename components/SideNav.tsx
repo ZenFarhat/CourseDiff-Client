@@ -1,5 +1,5 @@
 import { useRouter } from "next/router"
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { useAuth } from "../contexts/AuthContext"
 import { logout } from "../firebase/auth"
 import BasicButton from "./BasicButton"
@@ -7,6 +7,15 @@ import BasicButton from "./BasicButton"
 const SideNav = () => {
   const router = useRouter()
   const { user } = useAuth()
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    setLoading(false)
+  }, [])
+
+  if (loading) {
+    return <div className="w-64 flex flex-col bg-gray-900 items-center justify-between py-4"> </div>
+  }
 
   return (
     <div className="w-64 flex flex-col bg-gray-900 items-center justify-between py-4">

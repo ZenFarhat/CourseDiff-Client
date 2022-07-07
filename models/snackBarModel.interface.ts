@@ -1,4 +1,4 @@
 export interface SnackBarModel {
-  variant: "error" | "success"
+  variant: "error" | "success" | "warning"
   content: string
 }

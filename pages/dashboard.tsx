@@ -2,6 +2,7 @@ import type { NextPage } from "next"
 
 import { useEffect, useState } from "react"
 import BasicButton from "../components/BasicButton"
+import CompanyNameForm from "../components/CompanyNameForm"
 import DashBoardLoader from "../components/DashBoardLoader"
 import SubmitVideoForm from "../components/SubmitVideoForm"
 import VideoDashboardTile from "../components/VideoDashboardTile"
@@ -9,12 +10,11 @@ import { useAuth } from "../contexts/AuthContext"
 import { getUserInfo, updateCompanyName } from "../firebase/db"
 import { deleteVideo } from "../firebase/db/videos"
 import { UserInterface } from "../models/userCollectionModel.interface"
-import { loadingHandler$, modalHandler$, refreshDataSub$ } from "../rxjs"
+import { modalHandler$, refreshDataSub$ } from "../rxjs"
 
 const Dashboard: NextPage = () => {
   const { user, updateCompanyContext } = useAuth()
   const [userVideos, setUserVideos] = useState<UserInterface>()
-  const [companyName, setCompanyName] = useState("")
   const [loading, setLoading] = useState(true)
 
   const fetchProfile = async () => {
@@ -30,15 +30,6 @@ const Dashboard: NextPage = () => {
         console.log(e)
         setLoading(false)
       })
-  }
-
-  const updateCompany = async () => {
-    if (!user) return
-    try {
-      await updateCompanyName(user?.uid, companyName)
-    } catch (e) {
-      console.log(e)
-    }
   }
 
   useEffect(() => {
@@ -79,16 +70,7 @@ const Dashboard: NextPage = () => {
           })}
         </div>
       ) : (
-        <>
-          <p>{"Looks like you don't have a company name yet, please update it here: (note that this will appear on your diff urls')"}</p>
-          <input
-            type="text"
-            onChange={(e) => {
-              setCompanyName(e.target.value)
-            }}
-          />
-          <BasicButton onClick={updateCompany} buttonText="Update Company Name" />
-        </>
+        <CompanyNameForm />
       )}
     </div>
   )

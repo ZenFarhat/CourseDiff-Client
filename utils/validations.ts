@@ -12,3 +12,9 @@ export const passwordConfirmValidation = (referenceName: string) =>
 export const displayNameValidation = Yup.string().min(2, "Requires 3 characters minimum").required("Please enter a display name")
 
 export const videoNameValidation = Yup.string().min(3, "Requires 3 characters minimum").required("Please enter a video name")
+
+// do not allow spaces
+export const companyNameValidation = Yup.string()
+  .min(3, "Requires 3 characters minimum")
+  .required("Please enter a company name")
+  .test("no-spaces", "No spaces allowed", (value) => !value?.includes(" "))

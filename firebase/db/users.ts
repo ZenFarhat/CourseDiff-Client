@@ -1,7 +1,7 @@
 import { db } from ".."
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore"
+import { doc, getDoc, setDoc, updateDoc, getDocs, collection } from "firebase/firestore"
 import { UserInterface } from "../../models/userCollectionModel.interface"
-import { loadingHandler$, refreshDataSub$ } from "../../rxjs"
+import { loadingHandler$, refreshDataSub$, snackbarHandler$ } from "../../rxjs"
 
 export const getUserInfo = async (id: string): Promise<UserInterface> => {
   const docRef = doc(db, "users", id)
@@ -33,10 +33,29 @@ export const getUserInfo = async (id: string): Promise<UserInterface> => {
   }
 }
 
+const checkIfCompanyNameExists = async (companyName: string): Promise<boolean> => {
+  const querySnapshot = await getDocs(collection(db, "users"))
+
+  let foundData: boolean = false
+
+  querySnapshot.forEach((doc) => {
+    if (!doc.data().companyName) return
+    if (doc.data().companyName.toLowerCase() === companyName.toLowerCase()) {
+      foundData = true
+    }
+  })
+
+  loadingHandler$.next(false)
+  return foundData
+}
+
 export const updateCompanyName = async (id: string, companyName: string) => {
   try {
     loadingHandler$.next(true)
     const userRef = doc(db, "users", id)
+    const companyNameExists = await checkIfCompanyNameExists(companyName)
+    console.log(companyNameExists)
+    if (companyNameExists) return snackbarHandler$.next({ variant: "error", content: "Company name already exists!" })
     await updateDoc(userRef, {
       companyName: companyName,
     })
@@ -44,5 +63,6 @@ export const updateCompanyName = async (id: string, companyName: string) => {
     loadingHandler$.next(false)
   } catch (e) {
     loadingHandler$.next(false)
+    console.log(e)
   }
 }

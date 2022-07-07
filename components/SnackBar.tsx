@@ -43,6 +43,14 @@ const SnackBar = () => {
     )
   }
 
+  if (snackBarState.variant === "warning") {
+    return (
+      <div className={"fixed top-0 inset-x-0 bg-yellow-500 w-2/12 mx-auto mt-2 px-4 py-4 rounded-xl text-white text-center " + animation} ref={ref}>
+        {snackBarState.content}
+      </div>
+    )
+  }
+
   return <></>
 }
 
