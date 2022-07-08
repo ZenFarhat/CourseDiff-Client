@@ -28,7 +28,7 @@ export const addVideo = async (videoName: string) => {
     const videoIndex = data.videos.findIndex((item) => item.videoName === videoName)
     if (videoIndex !== -1) return
     const userRef = doc(db, "users", auth.currentUser.uid)
-    data.videos.push({ videoName: videoName, files: [{ fileName: "index.html", codeDiffs: [{ timeStamp: "0:00", codeDiff: "<h1>Hello World</h1>" }] }] })
+    data.videos.push({ videoName: videoName, files: [{ fileName: "index.html", codeDiffs: [{ timeStamp: "0s", codeDiff: "<h1>Hello World</h1>" }] }] })
     await updateDoc(userRef, { ...data })
     refreshDataSub$.next(true)
     snackbarHandler$.next({ variant: "success", content: `Video ${videoName} added!` })
@@ -53,15 +53,13 @@ export const getVideoDetails = async (companyName: string, videoName: string): P
   return foundData
 }
 
-export const updateVideo = async (fileName: string, videoName: string, data: codeDiffModel[]) => {
+export const updateVideo = async (videoName: string, data: VideosModel) => {
   if (!auth.currentUser) return
   try {
     const currentUser = await getUserInfo(auth.currentUser.uid)
     const videoIndex = currentUser.videos.findIndex((item) => item.videoName === videoName)
-    const fileIndex = currentUser.videos[videoIndex].files.findIndex((item) => item.fileName === fileName)
-    currentUser.videos[videoIndex].files[fileIndex].codeDiffs = data
+    currentUser.videos[videoIndex] = data
     await setDoc(doc(db, "users", auth.currentUser.uid), currentUser)
-    refreshDiffData$.next(true)
     snackbarHandler$.next({ content: "Video saved!", variant: "success" })
   } catch (e) {
     console.log(e)

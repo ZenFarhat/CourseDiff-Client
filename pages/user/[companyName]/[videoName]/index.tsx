@@ -11,14 +11,13 @@ import { getVideoDetails, updateVideo } from "../../../../firebase/db/videos"
 import DashBoardLoader from "../../../../components/DashBoardLoader"
 import { useAuth } from "../../../../contexts/AuthContext"
 import ComponentRequiresAuth from "../../../../components/ComponentRequiresAuth"
-import BasicButtonSmall from "../../../../components/BasicButtonSmall"
 import { getFileExtension } from "../../../../utils/getFileExtension"
+import AddTimestampInput from "../../../../components/AddTimestampInput"
 
 const VideoDiffPage = () => {
   const [video, setVideo] = useState<VideosModel>()
   const [fileIndex, setCurrentFileIndex] = useState(0)
   const [code, setCurrentCode] = useState<codeDiffModel>()
-  const [timeStamp, setTimeStamp] = useState("")
   const [searchValue, setSearchValue] = useState("")
   const [codeLanguage, setCodeLanguage] = useState("")
   const [loading, setLoading] = useState(true)
@@ -49,12 +48,12 @@ const VideoDiffPage = () => {
     setCodeLanguage(getFileExtension(fileName) || "")
   }
 
-  const addTimeStamp = () => {
-    const newFileData = { ...video }
-    if (!newFileData.files) return
+  const addTimeStamp = (timeStamp: string) => {
+    if (!video) return
+    const newFileData: VideosModel = { ...video }
     newFileData.files[fileIndex].codeDiffs.push({ codeDiff: "", timeStamp: timeStamp })
     setCurrentCode(newFileData.files[fileIndex].codeDiffs[newFileData.files[fileIndex].codeDiffs.length - 1])
-    setVideo(newFileData as VideosModel)
+    setVideo(newFileData)
   }
 
   const handleDiffChange = () => {
@@ -68,7 +67,19 @@ const VideoDiffPage = () => {
   const handleSave = async () => {
     if (!video || !videoName) return
     handleDiffChange()
-    await updateVideo(video?.files[fileIndex].fileName, videoName?.toString(), video.files[fileIndex].codeDiffs)
+    await updateVideo(videoName.toString(), video)
+  }
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(window.location.href)
+    snackbarHandler$.next({ content: "Url copied!", variant: "success" })
+  }
+
+  const addFile = (fileName: string) => {
+    if (!video) return
+    const newFileData: VideosModel = { ...video }
+    newFileData.files.push({ fileName: fileName, codeDiffs: [{ timeStamp: "0s", codeDiff: "" }] })
+    setVideo(newFileData)
   }
 
   const handleGetVideo = async () => {
@@ -87,11 +98,6 @@ const VideoDiffPage = () => {
       })
   }
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(window.location.href)
-    snackbarHandler$.next({ content: "Url copied!", variant: "success" })
-  }
-
   useEffect(() => {
     handleGetVideo()
     const sub = refreshDiffData$.subscribe({
@@ -100,7 +106,15 @@ const VideoDiffPage = () => {
       },
     })
 
-    return () => sub.unsubscribe()
+    document.addEventListener("mouseleave", handleSave)
+
+    const interval = setInterval(handleSave, 30000)
+
+    return () => {
+      sub.unsubscribe()
+      document.removeEventListener("mouseleave", handleSave)
+      clearInterval(interval)
+    }
   }, [])
 
   if (loading) {
@@ -114,24 +128,14 @@ const VideoDiffPage = () => {
           <input
             type="text"
             placeholder="Search for a timestamp.."
-            className="w-10/12 rounded-xl p-2"
+            className="w-full rounded-xl p-2 mx-auto"
             onChange={(e) => {
               setSearchValue(e.target.value)
             }}
           />
         </div>
         <ComponentRequiresAuth>
-          <div className="mb-2">
-            <input
-              type="text"
-              onChange={(e) => {
-                setTimeStamp(e.target.value)
-              }}
-              placeholder="Example: 1h20m30s or 1:00:00"
-              className="w-56 rounded-xl p-1"
-            />
-            <BasicButtonSmall buttonText="Add Timestamp" onClick={addTimeStamp} />
-          </div>
+          <AddTimestampInput onClick={addTimeStamp} />
         </ComponentRequiresAuth>
         <p>
           {user ? "Editing" : "Viewing"}: {video?.files[fileIndex].fileName} at {code?.timeStamp}
@@ -143,7 +147,7 @@ const VideoDiffPage = () => {
         </div>
       </div>
       <div className="h-full flex items-center justify-center">
-        <CodeDiffSidebar files={video?.files || null} getFileInfo={getFileInfo} />
+        <CodeDiffSidebar files={video?.files || null} getFileInfo={getFileInfo} addFile={addFile} />
         <DiffEditor original={code?.codeDiff} width="100%" height="100%" theme="vs-dark" onMount={handleEditorDidMount} language={codeLanguage} />
       </div>
       <ComponentRequiresAuth>

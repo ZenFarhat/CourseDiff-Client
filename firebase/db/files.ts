@@ -9,7 +9,7 @@ export const addFileToUser = async (videoName: string, fileName: string) => {
   try {
     const currentUser = await getUserInfo(auth.currentUser.uid)
     const videoIndex = currentUser.videos.findIndex((item) => item.videoName === videoName)
-    currentUser.videos[videoIndex].files.push({ fileName: fileName, codeDiffs: [{ timeStamp: "0:00", codeDiff: `${fileName}` }] })
+    currentUser.videos[videoIndex].files.push({ fileName: fileName, codeDiffs: [{ timeStamp: "0s", codeDiff: `${fileName}` }] })
     const userRef = doc(db, "users", auth.currentUser.uid)
     await updateDoc(userRef, { ...currentUser })
     refreshDiffData$.next(true)

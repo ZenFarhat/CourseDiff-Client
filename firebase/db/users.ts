@@ -15,11 +15,11 @@ export const getUserInfo = async (id: string): Promise<UserInterface> => {
       companyName: null,
       videos: [
         {
-          videoName: "html/css crash course",
+          videoName: "html-css crash course",
           files: [
             {
               fileName: "index.html",
-              codeDiffs: [{ timeStamp: "0:00", codeDiff: "<h1>Hello World</h1>" }],
+              codeDiffs: [{ timeStamp: "0s", codeDiff: "<h1>Hello World</h1>" }],
             },
           ],
         },
