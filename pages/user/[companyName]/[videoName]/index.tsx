@@ -117,10 +117,17 @@ const VideoDiffPage = () => {
       },
     })
 
+    return () => {
+      sub.unsubscribe()
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!user) return
+
     const interval = setInterval(handleSave, 30000)
 
     return () => {
-      sub.unsubscribe()
       clearInterval(interval)
     }
   }, [])
