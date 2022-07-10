@@ -25,8 +25,8 @@ export const addVideo = async (videoName: string) => {
   if (!auth.currentUser) return
   try {
     const data = await getUserInfo(auth.currentUser?.uid)
-    const videoIndex = data.videos.findIndex((item) => item.videoName === videoName)
-    if (videoIndex !== -1) return
+    const videoIndex = data.videos.findIndex((item) => item.videoName.toLowerCase() === videoName.toLowerCase())
+    if (videoIndex !== -1) return snackbarHandler$.next({ variant: "error", content: `Video ${videoName} already exists!` })
     const userRef = doc(db, "users", auth.currentUser.uid)
     data.videos.push({ videoName: videoName, files: [{ fileName: "index.html", codeDiffs: [{ timeStamp: "0s", codeDiff: "<h1>Hello World</h1>" }] }] })
     await updateDoc(userRef, { ...data })
