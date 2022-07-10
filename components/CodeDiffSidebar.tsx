@@ -8,15 +8,17 @@ import ComponentRequiresAuth from "./ComponentRequiresAuth"
 import FormInputField from "./FormInputField"
 import * as yup from "yup"
 import { fileValidation } from "../utils/validations"
+import { Trash } from "phosphor-react"
 
 interface CodeDiffSidebarProps {
   files: FilesArrayModel[] | null
   getFileInfo: (value: string) => void
   addFile: (value: string) => void
+  deleteFile: (value: string) => void
 }
 
 const CodeDiffSidebar = (props: CodeDiffSidebarProps) => {
-  const { files, getFileInfo, addFile } = props
+  const { files, getFileInfo, addFile, deleteFile } = props
 
   const formik = useFormik({
     initialValues: {
@@ -36,13 +38,22 @@ const CodeDiffSidebar = (props: CodeDiffSidebarProps) => {
         {files?.map((item, i) => {
           return (
             <div
-              className="w-full py-1 text-white cursor-pointer hover:bg-blue-800"
+              className="w-full py-2 text-white cursor-pointer hover:bg-blue-800 flex justify-between items-center"
               key={i}
               onClick={() => {
                 getFileInfo(item.fileName)
               }}
             >
               {item.fileName}
+              <ComponentRequiresAuth>
+                <Trash
+                  size={25}
+                  color="white"
+                  onClick={() => {
+                    deleteFile(item.fileName)
+                  }}
+                />
+              </ComponentRequiresAuth>
             </div>
           )
         })}

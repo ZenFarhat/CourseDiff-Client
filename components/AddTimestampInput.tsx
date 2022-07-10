@@ -25,8 +25,8 @@ const AddTimestampInput = (props: AddTimeStampInputProps) => {
   })
 
   return (
-    <form className="flex justify-center items-end w-6/12" onSubmit={formik.handleSubmit}>
-      <FormInputField type="text" label="Timestamp" id="timeStamp" placeholder="000h00m00s" onChange={formik.handleChange} errorMessage={formik.errors.timeStamp} value={formik.values.timeStamp} />
+    <form className="flex justify-center items-end" onSubmit={formik.handleSubmit}>
+      <FormInputField type="text" label="Add Timestamp" id="timeStamp" placeholder="000h00m00s" onChange={formik.handleChange} errorMessage={formik.errors.timeStamp} value={formik.values.timeStamp} />
       <div className="mb-11">
         <BasicButtonSmall buttonText="Add Timestamp" type="submit" />
       </div>

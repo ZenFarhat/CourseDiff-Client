@@ -59,9 +59,9 @@ const VideoDiffPage = () => {
   const handleDiffChange = () => {
     if (!video) return
     const newFileData: VideosModel = { ...video }
-    const timeStampIndex = newFileData?.files[fileIndex].codeDiffs.findIndex((item) => item.timeStamp === code?.timeStamp)
+    if (fileIndex === -1 || fileIndex === undefined) return setVideo({ ...newFileData })
+    const timeStampIndex = newFileData?.files[fileIndex]?.codeDiffs.findIndex((item) => item.timeStamp === code?.timeStamp)
     newFileData.files[fileIndex].codeDiffs[timeStampIndex].codeDiff = diffEditorRef.current?.getModifiedEditor().getValue() || ""
-    setVideo({ ...newFileData })
   }
 
   const handleSave = async () => {
@@ -98,6 +98,15 @@ const VideoDiffPage = () => {
       })
   }
 
+  const deleteFile = (fileName: string) => {
+    if (!video) return
+    const newFileData: VideosModel = { ...video }
+    const fileIndex = newFileData.files.findIndex((item) => item.fileName === fileName)
+    newFileData.files.splice(fileIndex, 1)
+    setVideo(newFileData)
+    setCurrentFileIndex(0)
+  }
+
   useEffect(() => {
     handleGetVideo()
     const sub = refreshDiffData$.subscribe({
@@ -106,13 +115,10 @@ const VideoDiffPage = () => {
       },
     })
 
-    document.addEventListener("mouseleave", handleSave)
-
     const interval = setInterval(handleSave, 30000)
 
     return () => {
       sub.unsubscribe()
-      document.removeEventListener("mouseleave", handleSave)
       clearInterval(interval)
     }
   }, [])
@@ -123,32 +129,35 @@ const VideoDiffPage = () => {
 
   return (
     <div className="h-screen p-2 bg-gray-200 flex flex-col justify-around">
-      <div>
-        <div className="mb-2">
+      <div className="flex h-20">
+        <div className="w-3/6">
+          <p className="block mb-2 text-sm font-medium">Search for a timestamp</p>
           <input
             type="text"
             placeholder="Search for a timestamp.."
-            className="w-full rounded-xl p-2 mx-auto"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             onChange={(e) => {
               setSearchValue(e.target.value)
             }}
           />
         </div>
-        <ComponentRequiresAuth>
-          <AddTimestampInput onClick={addTimeStamp} />
-        </ComponentRequiresAuth>
-        <p>
-          {user ? "Editing" : "Viewing"}: {video?.files[fileIndex].fileName} at {code?.timeStamp}
-        </p>
-        <div className="flex w-full mb-2">
-          {video?.files[fileIndex].codeDiffs.map((item, i) => {
-            return item.timeStamp.includes(searchValue) ? <TimeStampButton text={item.timeStamp} onClick={setTimeStampCode} key={i} /> : null
-          })}
+        <div className="w-3/6">
+          <ComponentRequiresAuth>
+            <AddTimestampInput onClick={addTimeStamp} />
+          </ComponentRequiresAuth>
         </div>
       </div>
+      <p>
+        {user ? "Editing" : "Viewing"} {video?.files[fileIndex] && video?.files[fileIndex].fileName} at {code?.timeStamp}
+      </p>
+      <div className="flex w-full mb-2">
+        {video?.files[fileIndex]?.codeDiffs.map((item, i) => {
+          return item.timeStamp.includes(searchValue) ? <TimeStampButton text={item.timeStamp} onClick={setTimeStampCode} key={i} /> : null
+        })}
+      </div>
       <div className="h-full flex items-center justify-center">
-        <CodeDiffSidebar files={video?.files || null} getFileInfo={getFileInfo} addFile={addFile} />
-        <DiffEditor original={code?.codeDiff} width="100%" height="100%" theme="vs-dark" onMount={handleEditorDidMount} language={codeLanguage} />
+        <CodeDiffSidebar files={video?.files || null} getFileInfo={getFileInfo} addFile={addFile} deleteFile={deleteFile} />
+        <DiffEditor original={code?.codeDiff || ""} width="100%" height="100%" theme="vs-dark" onMount={handleEditorDidMount} language={codeLanguage} />
       </div>
       <ComponentRequiresAuth>
         <div className="w-full flex items-end justify-between mt-4">
