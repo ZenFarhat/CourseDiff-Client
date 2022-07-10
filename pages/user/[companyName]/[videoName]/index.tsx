@@ -51,6 +51,7 @@ const VideoDiffPage = () => {
   const addTimeStamp = (timeStamp: string) => {
     if (!video) return
     const newFileData: VideosModel = { ...video }
+    if (newFileData.files[fileIndex].codeDiffs.find((item) => item.timeStamp === timeStamp)) return snackbarHandler$.next({ content: "Timestamp exists on this file", variant: "warning" })
     newFileData.files[fileIndex].codeDiffs.push({ codeDiff: "", timeStamp: timeStamp })
     setCurrentCode(newFileData.files[fileIndex].codeDiffs[newFileData.files[fileIndex].codeDiffs.length - 1])
     setVideo(newFileData)
@@ -78,6 +79,7 @@ const VideoDiffPage = () => {
   const addFile = (fileName: string) => {
     if (!video) return
     const newFileData: VideosModel = { ...video }
+    if (newFileData.files.find((item) => item.fileName === fileName)) return snackbarHandler$.next({ content: "File already exists!", variant: "warning" })
     newFileData.files.push({ fileName: fileName, codeDiffs: [{ timeStamp: "0s", codeDiff: "" }] })
     setVideo(newFileData)
   }

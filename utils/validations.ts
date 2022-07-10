@@ -43,4 +43,5 @@ const isValidFile = (file: string) => {
 
 export const fileValidation = Yup.string()
   .required("Please enter a file name")
-  .test("valid-file", "invalid file name", (value) => isValidFile(value as string))
+  .test("valid-file", "file requires extension", (value) => isValidFile(value as string))
+  .test("no-spaces", "No spaces allowed", (value) => !value?.includes(" "))
