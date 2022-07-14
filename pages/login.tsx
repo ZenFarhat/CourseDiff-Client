@@ -7,8 +7,9 @@ import FormInputField from "../components/FormInputField"
 import { signIn } from "../firebase/auth"
 import * as yup from "yup"
 import { emailValidation } from "../utils/validations"
+import { NextPage } from "next"
 
-const Login = () => {
+const Login: NextPage = () => {
   const router = useRouter()
 
   const formik = useFormik({

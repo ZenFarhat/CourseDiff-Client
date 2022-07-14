@@ -7,8 +7,9 @@ import * as yup from "yup"
 import { signUp } from "../firebase/auth"
 import { displayNameValidation, emailValidation, passwordConfirmValidation, passwordValidation } from "../utils/validations"
 import { useRouter } from "next/router"
+import { NextPage } from "next"
 
-const SignUp = () => {
+const SignUp: NextPage = () => {
   const router = useRouter()
   const handleSignUp = async () => {
     signUp(formik.values).then(() => {

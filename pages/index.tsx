@@ -1,12 +1,12 @@
 import type { NextPage } from "next"
 
-import Nav from "../home/Nav"
-import Hero from "../home/Hero"
-import About from "../home/About"
+import Nav from "../homeSections/Nav"
+import Hero from "../homeSections/Hero"
+import About from "../homeSections/About"
 
 const Home: NextPage = () => {
   return (
-    <div className="h-screen w-screen">
+    <div className="h-screen">
       <Nav />
       <Hero />
       <About />
