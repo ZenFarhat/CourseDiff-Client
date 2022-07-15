@@ -42,7 +42,7 @@ const PriceCard = (props: PriceCardProps) => {
           <p className="mb-2">{billingFrequency}</p>
         </div>
         <Link href="/signup">
-          <button className="bg-black py-2 px-5 rounded-xl ">Get Started</button>
+          <button className="bg-black py-2 px-5 rounded-xl">Get Started</button>
         </Link>
       </div>
     )
