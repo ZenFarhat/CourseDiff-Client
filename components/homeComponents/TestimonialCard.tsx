@@ -1,4 +1,5 @@
 import React from "react"
+import Image from "next/image"
 
 interface TestimonialCardProps {
   stat: string
@@ -13,7 +14,10 @@ const TestimonialCard = (props: TestimonialCardProps) => {
   const { stat, statDesc, quote, founderName, founderUrl, bgVariant } = props
 
   return (
-    <div className="my-10 w-10/12 md:w-5/12 lg:w-3/12 py-8 bg-white shadow-2xl rounded-3xl text-center flex flex-col justify-between">
+    <div className="my-10 w-10/12 md:w-5/12 lg:w-3/12 py-4 bg-white shadow-2xl rounded-3xl text-center flex flex-col justify-between">
+      <div className="w-full mx-auto">
+        <Image src="/logo.jpg" width="100%" height="100%" alt="companyLogo" className="object-contain" />
+      </div>
       <div className={`flex justify-between items-center w-full rounded-3xl p-4 text-white text-xl md:text-3xl font-bold mb-10 ` + bgVariant}>
         <p>{stat}</p>
         <p>{statDesc}</p>

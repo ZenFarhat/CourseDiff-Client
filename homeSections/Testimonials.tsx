@@ -8,7 +8,7 @@ const Testimonials = () => {
 
   return (
     <div
-      className="bg-blue-50 flex justify-around items-stretch flex-wrap py-32 px-4"
+      className="bg-blue-50 flex justify-around items-stretch flex-wrap py-24 px-4"
       ref={ref}
       style={{
         opacity: isInView ? 1 : 0,
