@@ -1,5 +1,6 @@
+import { useInView } from "framer-motion"
 import Link from "next/link"
-import React from "react"
+import React, { useRef } from "react"
 
 interface PriceCardProps {
   plan: string
@@ -11,10 +12,20 @@ interface PriceCardProps {
 
 const PriceCard = (props: PriceCardProps) => {
   const { plan, price, monthlyPriceText, billingFrequency, variant } = props
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true })
 
   if (variant === 1) {
     return (
-      <div className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-4 rounded-xl shadow-xl text-white w-2/6 flex-grow mx-2 my-2 h-fit">
+      <div
+        className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-4 rounded-xl shadow-xl text-white md:w-2/6 flex-grow mx-2 my-2 h-fit"
+        ref={ref}
+        style={{
+          transform: isInView ? "none" : "translateX(-100px)",
+          opacity: isInView ? 1 : 0,
+          transition: "all 0.9s cubic-bezier(0.17, 0.55, 0.55, 1) 0.5s",
+        }}
+      >
         <div className="p-2 rounded-full bg-white bg-opacity-30 text-white md:w-32 text-center mb-2">
           <p className="text-xs font-bold">{plan}</p>
         </div>
@@ -32,7 +43,15 @@ const PriceCard = (props: PriceCardProps) => {
 
   if (variant === 2) {
     return (
-      <div className="bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 p-4 rounded-xl shadow-xl text-white w-2/6 flex-grow mx-2 my-2 h-fit">
+      <div
+        className="bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 p-4 rounded-xl shadow-xl text-white md:w-2/6 flex-grow mx-2 my-2 h-fit"
+        ref={ref}
+        style={{
+          transform: isInView ? "none" : "translateX(100px)",
+          opacity: isInView ? 1 : 0,
+          transition: "all 0.9s cubic-bezier(0.17, 0.55, 0.55, 1) 0.5s",
+        }}
+      >
         <div className="p-2 rounded-full bg-white bg-opacity-30 text-white md:w-32 text-center mb-2">
           <p className="text-xs font-bold">{plan}</p>
         </div>
@@ -49,7 +68,15 @@ const PriceCard = (props: PriceCardProps) => {
   }
 
   return (
-    <div className="bg-gray-800 p-4 rounded-xl shadow-xl text-white w-2/6 flex-grow mx-2 my-2 h-fit">
+    <div
+      className="bg-gray-800 p-4 rounded-xl shadow-xl text-white w-2/6 flex-grow mx-2 my-2 h-fit"
+      ref={ref}
+      style={{
+        transform: isInView ? "none" : "translateY(100px)",
+        opacity: isInView ? 1 : 0,
+        transition: "all 0.9s cubic-bezier(0.17, 0.55, 0.55, 1) 0.5s",
+      }}
+    >
       <div className="p-2 rounded-full bg-white bg-opacity-30 text-white md:w-32 text-center mb-2">
         <p className="text-xs font-bold">{plan}</p>
       </div>
