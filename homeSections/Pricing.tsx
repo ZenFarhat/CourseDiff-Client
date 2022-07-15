@@ -1,7 +1,7 @@
 import React from "react"
 import PriceCard from "../components/homeComponents/PriceCard"
 
-const About = () => {
+const Pricing = () => {
   return (
     <section className="bg-gray-900 py-12 overflow-hidden">
       <div className="w-11/12 mx-auto">
@@ -12,9 +12,9 @@ const About = () => {
             <h2 className="text-white text-xl  md:text-xl">Choose the plan that best fits you.</h2>
           </div>
           <div className="lg:w-3/6 flex flex-wrap items-start justify-star">
-            <PriceCard plan="Quarterly plan" price="$75" monthlyPriceText="Paid quarterly" billingFrequency="$25 p/mo" variant={1} />
-            <PriceCard plan="Yearly plan" price="$240" monthlyPriceText="Paid annualy" billingFrequency="$20 p/mo" variant={2} />
-            <PriceCard plan="Monthly plan" price="$28" monthlyPriceText="Paid monthly" billingFrequency="Let's take it one month at a time" />
+            <PriceCard plan="Quarterly plan" price="$270" monthlyPriceText="Paid quarterly" billingFrequency="$90 p/mo" variant={1} />
+            <PriceCard plan="Yearly plan" price="$1,020" monthlyPriceText="Paid annualy" billingFrequency="$85 p/mo" variant={2} />
+            <PriceCard plan="Monthly plan" price="$99" monthlyPriceText="Paid monthly" billingFrequency="Let's take it one month at a time" />
           </div>
         </div>
       </div>
@@ -22,4 +22,4 @@ const About = () => {
   )
 }
 
-export default About
+export default Pricing

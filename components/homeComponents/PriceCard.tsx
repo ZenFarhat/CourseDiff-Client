@@ -32,7 +32,7 @@ const PriceCard = (props: PriceCardProps) => {
         <div>
           <p className="font-bold text-3xl mb-2">{price}</p>
           <p className="font-bold text-2xl mb-2">{monthlyPriceText}</p>
-          <p className="mb-2">{billingFrequency}</p>
+          <p className="mb-2 italic">{billingFrequency}</p>
         </div>
         <Link href="/signup">
           <button className="bg-black py-2 px-5 rounded-xl ">Get Started</button>
@@ -58,7 +58,7 @@ const PriceCard = (props: PriceCardProps) => {
         <div>
           <p className="font-bold text-3xl mb-2">{price}</p>
           <p className="font-bold text-2xl mb-2">{monthlyPriceText}</p>
-          <p className="mb-2">{billingFrequency}</p>
+          <p className="mb-2 italic">{billingFrequency}</p>
         </div>
         <Link href="/signup">
           <button className="bg-black py-2 px-5 rounded-xl">Get Started</button>
@@ -69,7 +69,7 @@ const PriceCard = (props: PriceCardProps) => {
 
   return (
     <div
-      className="bg-gray-800 p-4 rounded-xl shadow-xl text-white w-2/6 flex-grow mx-2 my-2 h-fit"
+      className="bg-gray-800 p-4 rounded-xl shadow-xl text-white md:w-2/6 flex-grow mx-2 my-2 h-fit"
       ref={ref}
       style={{
         transform: isInView ? "none" : "translateY(100px)",
@@ -83,7 +83,7 @@ const PriceCard = (props: PriceCardProps) => {
       <div>
         <p className="font-bold text-3xl mb-2">{price}</p>
         <p className="font-bold text-2xl mb-2">{monthlyPriceText}</p>
-        <p className="mb-2">{billingFrequency}</p>
+        <p className="mb-2 italic">{billingFrequency}</p>
       </div>
       <Link href="/signup">
         <button className="bg-black py-2 px-5 rounded-xl ">Get Started</button>
