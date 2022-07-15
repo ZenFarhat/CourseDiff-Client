@@ -21,7 +21,7 @@ const PriceCard = (props: PriceCardProps) => {
         className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-4 rounded-xl shadow-xl text-white md:w-2/6 flex-grow mx-2 my-2 h-fit"
         ref={ref}
         style={{
-          transform: isInView ? "none" : "translateX(-100px)",
+          transform: isInView ? "none" : "translateY(-100px)",
           opacity: isInView ? 1 : 0,
           transition: "all 0.9s cubic-bezier(0.17, 0.55, 0.55, 1) 0.5s",
         }}
