@@ -13,6 +13,7 @@ import { useAuth } from "../../../contexts/AuthContext"
 import ComponentRequiresAuth from "../../../components/ComponentRequiresAuth"
 import { getFileExtension } from "../../../utils/getFileExtension"
 import AddTimestampInput from "../../../components/AddTimestampInput"
+import { themeData } from "../../../configs/monacoTheme"
 
 const VideoDiffPage = () => {
   const [video, setVideo] = useState<VideosModel>()
@@ -30,6 +31,8 @@ const VideoDiffPage = () => {
 
   const handleEditorDidMount = (editor: monaco.editor.IStandaloneDiffEditor, monaco: Monaco) => {
     diffEditorRef.current = editor
+    monaco.editor.defineTheme("customTheme", themeData)
+    monaco.editor.setTheme("customTheme")
   }
 
   const setTimeStampCode = (timeStamp: string) => {
@@ -166,7 +169,7 @@ const VideoDiffPage = () => {
       </div>
       <div className="h-full flex items-center justify-center">
         <CodeDiffSidebar files={video?.files || null} getFileInfo={getFileInfo} addFile={addFile} deleteFile={deleteFile} />
-        <DiffEditor original={code?.codeDiff || ""} width="100%" height="100%" theme="vs-dark" onMount={handleEditorDidMount} language={codeLanguage} />
+        <DiffEditor original={code?.codeDiff || ""} width="100%" height="100%" theme="customTheme" onMount={handleEditorDidMount} language={codeLanguage} />
       </div>
       <ComponentRequiresAuth>
         <div className="w-full flex items-end justify-between mt-4">
