@@ -2,7 +2,7 @@ import monaco from "monaco-editor"
 
 export const themeData: monaco.editor.IStandaloneThemeData = {
   base: "vs-dark",
-  inherit: false,
+  inherit: true,
   rules: [
     {
       foreground: "ffffff61",
