@@ -13,7 +13,6 @@ import { useAuth } from "../../../contexts/AuthContext"
 import ComponentRequiresAuth from "../../../components/ComponentRequiresAuth"
 import { getFileExtension } from "../../../utils/getFileExtension"
 import AddTimestampInput from "../../../components/AddTimestampInput"
-import { themeData } from "../../../configs/monacoTheme"
 
 const VideoDiffPage = () => {
   const [video, setVideo] = useState<VideosModel>()
@@ -31,8 +30,6 @@ const VideoDiffPage = () => {
 
   const handleEditorDidMount = (editor: monaco.editor.IStandaloneDiffEditor, monaco: Monaco) => {
     diffEditorRef.current = editor
-    monaco.editor.defineTheme("customTheme", themeData)
-    monaco.editor.setTheme("customTheme")
   }
 
   const setTimeStampCode = (timeStamp: string) => {
@@ -145,16 +142,11 @@ const VideoDiffPage = () => {
 
   return (
     <div className="h-screen p-2 bg-gray-200 flex flex-col justify-around">
-      <div className="flex h-20">
-        <div className="w-3/6">
-          <ComponentRequiresAuth>
-            <AddTimestampInput onClick={addTimeStamp} />
-          </ComponentRequiresAuth>
-        </div>
+      <div className="w-3/6">
+        <ComponentRequiresAuth>
+          <AddTimestampInput onClick={addTimeStamp} />
+        </ComponentRequiresAuth>
       </div>
-      <p>
-        {user ? "Editing" : "Viewing"} {video?.files[fileIndex] && video?.files[fileIndex].fileName} at {code?.timeStamp}
-      </p>
       <div className="flex w-full mb-2">
         {video?.files[fileIndex]?.codeDiffs.map((item, i) => {
           return item.timeStamp.includes(searchValue) ? <TimeStampButton text={item.timeStamp} onClick={setTimeStampCode} key={i} /> : null
@@ -162,20 +154,12 @@ const VideoDiffPage = () => {
       </div>
       <div className="h-full flex items-center justify-center">
         <CodeDiffSidebar files={video?.files || null} getFileInfo={getFileInfo} addFile={addFile} deleteFile={deleteFile} handleSearch={handleSearch} />
-        <DiffEditor original={code?.codeDiff || ""} width="100%" height="100%" theme="customTheme" onMount={handleEditorDidMount} language={codeLanguage} />
+        <DiffEditor original={code?.codeDiff || ""} width="100%" height="100%" theme="vs-dark" onMount={handleEditorDidMount} language={codeLanguage} />
       </div>
       <ComponentRequiresAuth>
-        <div className="w-full flex items-end justify-between mt-4">
-          <BasicButton
-            buttonText="Go back to dashboard"
-            onClick={() => {
-              router.push("/dashboard")
-            }}
-          />
-          <div>
-            <BasicButton buttonText="Share link" onClick={handleCopy} />
-            <BasicButton buttonText="Save Changes" onClick={handleSave} />
-          </div>
+        <div className="mt-5">
+          <BasicButton buttonText="Share link" onClick={handleCopy} />
+          <BasicButton buttonText="Save Changes" onClick={handleSave} />
         </div>
       </ComponentRequiresAuth>
     </div>

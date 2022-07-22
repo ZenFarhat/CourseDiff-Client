@@ -2,7 +2,7 @@ import React, { ChangeEvent } from "react"
 
 interface FormInputFieldProps {
   type: string
-  label: string
+  label?: string
   id: string
   onChange: (e: ChangeEvent<any>) => void
   required?: true
@@ -10,10 +10,22 @@ interface FormInputFieldProps {
   value: string
   errorMessage?: string
   disabled?: boolean
+  roundedLeft?: boolean
+  roundedRight?: boolean
 }
 
 const FormInputField = (props: FormInputFieldProps) => {
-  const { type, label, id, onChange, required, placeholder, value, errorMessage, disabled } = props
+  const { type, label, id, onChange, required, placeholder, value, errorMessage, disabled, roundedLeft, roundedRight } = props
+
+  const generateRounded = () => {
+    if (roundedLeft) {
+      return "rounded-tl-xl rounded-bl-xl"
+    }
+    if (roundedRight) {
+      return "rounded-tr-xl rounded-br-xl"
+    }
+    return "rounded-xl"
+  }
 
   const ErrorMessage = () => {
     return (
@@ -24,11 +36,13 @@ const FormInputField = (props: FormInputFieldProps) => {
   }
 
   return (
-    <div className="mb-4 w-5/6">
-      <label htmlFor={id} className="block mb-2 text-sm font-medium">
-        {label}
-      </label>
-      <input onBlur={onChange} onChange={onChange} value={value} type={type || "text"} id={id} name={id} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder={placeholder} required={required} disabled={disabled} />
+    <div className="mb-4 w-full">
+      {label && (
+        <label htmlFor={id} className="block mb-2 text-sm font-medium">
+          {label}
+        </label>
+      )}
+      <input onBlur={onChange} onChange={onChange} value={value} type={type || "text"} id={id} name={id} className={"bg-gray-100 text-gray-900 text-sm w-full p-2 " + generateRounded()} placeholder={placeholder} required={required} disabled={disabled} />
       <ErrorMessage />
     </div>
   )
