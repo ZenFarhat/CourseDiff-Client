@@ -112,6 +112,10 @@ const VideoDiffPage = () => {
     setCurrentFileIndex(0)
   }
 
+  const handleSearch = (value: string) => {
+    setSearchValue(value)
+  }
+
   useEffect(() => {
     handleGetVideo()
     const sub = refreshDiffData$.subscribe({
@@ -143,17 +147,6 @@ const VideoDiffPage = () => {
     <div className="h-screen p-2 bg-gray-200 flex flex-col justify-around">
       <div className="flex h-20">
         <div className="w-3/6">
-          <p className="block mb-2 text-sm font-medium">Search for a timestamp</p>
-          <input
-            type="text"
-            placeholder="Search for a timestamp.."
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-            onChange={(e) => {
-              setSearchValue(e.target.value)
-            }}
-          />
-        </div>
-        <div className="w-3/6">
           <ComponentRequiresAuth>
             <AddTimestampInput onClick={addTimeStamp} />
           </ComponentRequiresAuth>
@@ -168,7 +161,7 @@ const VideoDiffPage = () => {
         })}
       </div>
       <div className="h-full flex items-center justify-center">
-        <CodeDiffSidebar files={video?.files || null} getFileInfo={getFileInfo} addFile={addFile} deleteFile={deleteFile} />
+        <CodeDiffSidebar files={video?.files || null} getFileInfo={getFileInfo} addFile={addFile} deleteFile={deleteFile} handleSearch={handleSearch} />
         <DiffEditor original={code?.codeDiff || ""} width="100%" height="100%" theme="customTheme" onMount={handleEditorDidMount} language={codeLanguage} />
       </div>
       <ComponentRequiresAuth>

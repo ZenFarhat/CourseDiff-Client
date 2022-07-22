@@ -8,17 +8,18 @@ import ComponentRequiresAuth from "./ComponentRequiresAuth"
 import FormInputField from "./FormInputField"
 import * as yup from "yup"
 import { fileValidation } from "../utils/validations"
-import { Trash } from "phosphor-react"
+import { FileSearch, Trash } from "phosphor-react"
 
 interface CodeDiffSidebarProps {
   files: FilesArrayModel[] | null
   getFileInfo: (value: string) => void
   addFile: (value: string) => void
   deleteFile: (value: string) => void
+  handleSearch: (value: string) => void
 }
 
 const CodeDiffSidebar = (props: CodeDiffSidebarProps) => {
-  const { files, getFileInfo, addFile, deleteFile } = props
+  const { files, getFileInfo, addFile, deleteFile, handleSearch } = props
 
   const formik = useFormik({
     initialValues: {
@@ -34,6 +35,17 @@ const CodeDiffSidebar = (props: CodeDiffSidebarProps) => {
 
   return (
     <div className="w-1/6 bg-blue-900 h-full p-2">
+      <div className="flex justify-center items-center">
+        <FileSearch size={32} className="bg-white rounded-tl-xl rounded-bl-xl" />
+        <input
+          type="text"
+          placeholder="Find Timstamp"
+          className="bg-gray-50 text-gray-900 text-sm rounded-tr-xl rounded-br-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
+          onChange={(e) => {
+            handleSearch(e.target.value)
+          }}
+        />
+      </div>
       <div>
         {files?.map((item, i) => {
           return (
