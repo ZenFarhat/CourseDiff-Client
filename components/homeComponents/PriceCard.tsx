@@ -23,7 +23,7 @@ const PriceCard = (props: PriceCardProps) => {
         style={{
           transform: isInView ? "none" : "translateY(-100px)",
           opacity: isInView ? 1 : 0,
-          transition: "all 0.9s cubic-bezier(0.17, 0.55, 0.55, 1) 0.5s",
+          transition: "all 0.9s cubic-bezier(0.17, 0.55, 0.55, 1) 0.2s",
         }}
       >
         <div className="p-2 rounded-full bg-white bg-opacity-30 text-white md:w-32 text-center mb-2">
@@ -49,7 +49,7 @@ const PriceCard = (props: PriceCardProps) => {
         style={{
           transform: isInView ? "none" : "translateX(100px)",
           opacity: isInView ? 1 : 0,
-          transition: "all 0.9s cubic-bezier(0.17, 0.55, 0.55, 1) 0.5s",
+          transition: "all 0.9s cubic-bezier(0.17, 0.55, 0.55, 1) 0.2s",
         }}
       >
         <div className="p-2 rounded-full bg-white bg-opacity-30 text-white md:w-32 text-center mb-2">
@@ -74,7 +74,7 @@ const PriceCard = (props: PriceCardProps) => {
       style={{
         transform: isInView ? "none" : "translateY(100px)",
         opacity: isInView ? 1 : 0,
-        transition: "all 0.9s cubic-bezier(0.17, 0.55, 0.55, 1) 0.5s",
+        transition: "all 0.9s cubic-bezier(0.17, 0.55, 0.55, 1) 0.2s",
       }}
     >
       <div className="p-2 rounded-full bg-white bg-opacity-30 text-white md:w-32 text-center mb-2">

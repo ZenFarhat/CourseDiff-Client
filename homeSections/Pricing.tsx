@@ -5,10 +5,10 @@ import { useInView } from "framer-motion"
 
 const Pricing = () => {
   const ref = useRef(null)
-  const isInView = useInView(ref)
+  const isInView = useInView(ref, { once: true })
 
   return (
-    <section className="bg-gray-900 py-12 overflow-hidden">
+    <section className="bg-gray-900 py-14 overflow-hidden">
       <div className="w-11/12 mx-auto">
         <div className="container mx-auto flex flex-wrap justify-between">
           <div className="lg:w-2/6 mb-11 flex flex-col">
