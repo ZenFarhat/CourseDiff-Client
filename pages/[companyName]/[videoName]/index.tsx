@@ -9,7 +9,6 @@ import TimeStampButton from "../../../components/TimeStampButton"
 import * as monaco from "monaco-editor"
 import { getVideoDetails, updateVideo } from "../../../firebase/db/videos"
 import DashBoardLoader from "../../../components/DashBoardLoader"
-import { useAuth } from "../../../contexts/AuthContext"
 import ComponentRequiresAuth from "../../../components/ComponentRequiresAuth"
 import { getFileExtension } from "../../../utils/getFileExtension"
 import AddTimestampInput from "../../../components/AddTimestampInput"
@@ -26,7 +25,6 @@ const VideoDiffPage = () => {
 
   const router = useRouter()
   const { companyName, videoName } = router.query
-  const { user } = useAuth()
 
   const handleEditorDidMount = (editor: monaco.editor.IStandaloneDiffEditor, monaco: Monaco) => {
     diffEditorRef.current = editor
@@ -42,9 +40,11 @@ const VideoDiffPage = () => {
   const getFileInfo = (fileName: string) => {
     if (!video) return
     const newFileData = { ...video }
+    diffEditorRef.current?.getModifiedEditor().setValue("")
     setCurrentFileIndex(newFileData.files.findIndex((item) => item.fileName === fileName))
     const file = newFileData.files.find((item) => item.fileName === fileName)
     setCurrentCode(file?.codeDiffs[0])
+
     setCodeLanguage(getFileExtension(fileName) || "")
   }
 
@@ -123,16 +123,6 @@ const VideoDiffPage = () => {
 
     return () => {
       sub.unsubscribe()
-    }
-  }, [])
-
-  useEffect(() => {
-    if (!user) return
-
-    const interval = setInterval(handleSave, 30000)
-
-    return () => {
-      clearInterval(interval)
     }
   }, [])
 
