@@ -75,11 +75,14 @@ const VideoDiffPage = () => {
     snackbarHandler$.next({ content: "Url copied!", variant: "success" })
   }
 
-  const addFile = (fileName: string) => {
+  const addFile = (fileName: string, refId: string) => {
     if (!video) return
     const newFileData: VideosModel = { ...video }
-    if (newFileData.files.find((item) => item.fileName === fileName)) return snackbarHandler$.next({ content: "File already exists!", variant: "warning" })
-    newFileData.files.push({ fileName: fileName, codeDiffs: [{ timeStamp: "0s", codeDiff: "" }] })
+    if (newFileData.files.find((item) => item.refId === refId)) {
+      newFileData.files.find((item) => item.refId === refId)?.children.push({ type: fileName.includes(".") ? "file" : "folder", id: "1234", name: fileName, codeDiffs: [{ timeStamp: "0:00", codeDiff: "Hello World" }] })
+    } else {
+      newFileData.files.push({ refId: refId, children: [{ type: fileName.includes(".") ? "file" : "folder", id: "1234", name: fileName, codeDiffs: [{ timeStamp: "0:00", codeDiff: "Hello World" }] }] })
+    }
     setVideo(newFileData)
   }
 
@@ -89,8 +92,6 @@ const VideoDiffPage = () => {
       .then((data) => {
         if (!data) return
         setVideo(data)
-        setCodeLanguage(getFileExtension(data.files[0].fileName) || "")
-        setCurrentCode(data.files[fileIndex].codeDiffs[data.files[fileIndex].codeDiffs.length - 1])
         setLoading(false)
       })
       .catch((e) => {

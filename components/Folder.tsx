@@ -19,12 +19,12 @@ const Folder = (props: FolderProps) => {
 
   return (
     <>
-      <div style={{ backgroundColor: "#F2DC9A" }} onClick={handleFolderClick}>
+      <div className="bg-yellow-100" onClick={handleFolderClick}>
         {currentFolderName}
       </div>
-      <div style={{ display: hidden ? "none" : "block", backgroundColor: "#00c3ff" }}>
+      <div style={{ display: hidden ? "none" : "block" }} className="bg-blue-50">
         {folderContents?.children.map((item) => {
-          return item.type === "folder" ? <Folder refId={item.Id} data={data} currentFolderName={item.name} /> : <div>{item.name}</div>
+          return item.type === "folder" ? <Folder refId={item.id} data={data} currentFolderName={item.name} /> : <div>{item.name}</div>
         })}
       </div>
     </>

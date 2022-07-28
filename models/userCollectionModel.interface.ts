@@ -1,6 +1,6 @@
 export interface Children {
   type: "folder" | "file"
-  Id: string
+  id: string
   name: string
   codeDiffs?: codeDiffModel[]
 }

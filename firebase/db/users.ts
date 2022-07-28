@@ -2,7 +2,7 @@ import { db } from ".."
 import { doc, getDoc, setDoc, updateDoc, getDocs, collection } from "firebase/firestore"
 import { UserInterface } from "../../models/userCollectionModel.interface"
 import { loadingHandler$, refreshDataSub$, snackbarHandler$ } from "../../rxjs"
-import { uuid } from "uuidv4"
+import { v4 as uuidv4 } from "uuid"
 
 export const getUserInfo = async (id: string): Promise<UserInterface> => {
   const docRef = doc(db, "users", id)
@@ -23,23 +23,23 @@ export const getUserInfo = async (id: string): Promise<UserInterface> => {
               children: [
                 {
                   type: "folder",
-                  Id: uuid(),
+                  id: uuidv4(),
                   name: "src",
                 },
                 {
                   type: "folder",
-                  Id: uuid(),
+                  id: uuidv4(),
                   name: "public",
                 },
                 {
                   type: "file",
-                  Id: uuid(),
+                  id: uuidv4(),
                   name: "index.html",
                   codeDiffs: [],
                 },
                 {
                   type: "file",
-                  Id: uuid(),
+                  id: uuidv4(),
                   name: "styles.css",
                 },
               ],
