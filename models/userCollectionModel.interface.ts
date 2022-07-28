@@ -1,11 +1,18 @@
+export interface Children {
+  type: "folder" | "file"
+  Id: string
+  name: string
+  codeDiffs?: codeDiffModel[]
+}
+
 export interface codeDiffModel {
   timeStamp: string
   codeDiff: string
 }
 
 export interface FilesArrayModel {
-  fileName: string
-  codeDiffs: codeDiffModel[]
+  refId: string | null
+  children: Children[]
 }
 
 export interface VideosModel {

@@ -1,6 +1,6 @@
 import { useFormik } from "formik"
 
-import React from "react"
+import React, { useId } from "react"
 import { FilesArrayModel } from "../models/userCollectionModel.interface"
 
 import ComponentRequiresAuth from "./ComponentRequiresAuth"
@@ -8,9 +8,10 @@ import FormInputField from "./FormInputField"
 import * as yup from "yup"
 import { fileValidation } from "../utils/validations"
 import { MagnifyingGlass, Plus, Trash } from "phosphor-react"
+import Folder from "../components/Folder"
 
 interface CodeDiffSidebarProps {
-  files: FilesArrayModel[] | null
+  files: FilesArrayModel[]
   getFileInfo: (value: string) => void
   addFile: (value: string) => void
   deleteFile: (value: string) => void
@@ -19,6 +20,7 @@ interface CodeDiffSidebarProps {
 
 const CodeDiffSidebar = (props: CodeDiffSidebarProps) => {
   const { files, getFileInfo, addFile, deleteFile, handleSearch } = props
+  const id = useId()
 
   const formik = useFormik({
     initialValues: {
@@ -56,25 +58,10 @@ const CodeDiffSidebar = (props: CodeDiffSidebarProps) => {
         </div>
       </ComponentRequiresAuth>
       <div>
-        {files?.map((item, i) => {
+        {files[0]?.children?.map((item, i) => {
           return (
-            <div
-              className="py-1 text-white cursor-pointer hover:bg-blue-800 flex justify-between items-center"
-              key={i}
-              onClick={() => {
-                getFileInfo(item.fileName)
-              }}
-            >
-              {item.fileName}
-              <ComponentRequiresAuth>
-                <Trash
-                  size={25}
-                  color="white"
-                  onClick={() => {
-                    deleteFile(item.fileName)
-                  }}
-                />
-              </ComponentRequiresAuth>
+            <div key={id} style={{ cursor: "pointer" }}>
+              {item.type === "folder" ? <Folder refId={item.Id} data={files} currentFolderName={item.name} /> : <div>{item.name}</div>}
             </div>
           )
         })}

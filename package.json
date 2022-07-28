@@ -7,7 +7,8 @@
     "build": "dotenv -e .env.dev next build",
     "start": "dotenv -e .env.dev next dev",
     "start:prod": "dotenv -e .env.prod next dev",
-    "lint": "next lint"
+    "lint": "next lint",
+    "check:types": "tsc --noEmit"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.4.5",
@@ -22,6 +23,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "rxjs": "^7.5.5",
+    "uuidv4": "^6.2.13",
     "yup": "^0.32.11"
   },
   "devDependencies": {

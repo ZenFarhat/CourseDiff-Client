@@ -2,6 +2,7 @@ import { db } from ".."
 import { doc, getDoc, setDoc, updateDoc, getDocs, collection } from "firebase/firestore"
 import { UserInterface } from "../../models/userCollectionModel.interface"
 import { loadingHandler$, refreshDataSub$, snackbarHandler$ } from "../../rxjs"
+import { uuid } from "uuidv4"
 
 export const getUserInfo = async (id: string): Promise<UserInterface> => {
   const docRef = doc(db, "users", id)
@@ -18,8 +19,30 @@ export const getUserInfo = async (id: string): Promise<UserInterface> => {
           videoName: "html-css crash course",
           files: [
             {
-              fileName: "index.html",
-              codeDiffs: [{ timeStamp: "0s", codeDiff: "<h1>Hello World</h1>" }],
+              refId: null,
+              children: [
+                {
+                  type: "folder",
+                  Id: uuid(),
+                  name: "src",
+                },
+                {
+                  type: "folder",
+                  Id: uuid(),
+                  name: "public",
+                },
+                {
+                  type: "file",
+                  Id: uuid(),
+                  name: "index.html",
+                  codeDiffs: [],
+                },
+                {
+                  type: "file",
+                  Id: uuid(),
+                  name: "styles.css",
+                },
+              ],
             },
           ],
         },

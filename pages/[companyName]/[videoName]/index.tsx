@@ -5,7 +5,6 @@ import { DiffEditor, Monaco } from "@monaco-editor/react"
 import CodeDiffSidebar from "../../../components/CodeDiffSidebar"
 import { refreshDiffData$, snackbarHandler$ } from "../../../rxjs"
 import BasicButton from "../../../components/BasicButton"
-import TimeStampButton from "../../../components/TimeStampButton"
 import * as monaco from "monaco-editor"
 import { getVideoDetails, updateVideo } from "../../../firebase/db/videos"
 import DashBoardLoader from "../../../components/DashBoardLoader"
@@ -137,13 +136,9 @@ const VideoDiffPage = () => {
           <AddTimestampInput onClick={addTimeStamp} />
         </ComponentRequiresAuth>
       </div>
-      <div className="flex w-full mb-2">
-        {video?.files[fileIndex]?.codeDiffs.map((item, i) => {
-          return item.timeStamp.includes(searchValue) ? <TimeStampButton text={item.timeStamp} onClick={setTimeStampCode} key={i} /> : null
-        })}
-      </div>
+      <div className="flex w-full mb-2"></div>
       <div className="h-full flex items-center justify-center">
-        <CodeDiffSidebar files={video?.files || null} getFileInfo={getFileInfo} addFile={addFile} deleteFile={deleteFile} handleSearch={handleSearch} />
+        <CodeDiffSidebar files={video?.files} getFileInfo={getFileInfo} addFile={addFile} deleteFile={deleteFile} handleSearch={handleSearch} />
         <DiffEditor original={code?.codeDiff || ""} width="100%" height="100%" theme="vs-dark" onMount={handleEditorDidMount} language={codeLanguage} />
       </div>
       <ComponentRequiresAuth>
