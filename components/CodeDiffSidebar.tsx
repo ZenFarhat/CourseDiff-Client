@@ -2,13 +2,16 @@ import React, { useState } from "react"
 import { FolderChildrenModel } from "../models/userCollectionModel.interface"
 
 import { MagnifyingGlass } from "phosphor-react"
+import ComponentRequiresAuth from "./ComponentRequiresAuth"
+import ContextMenu from "./ContextMenu"
 
 interface CodeDiffSidebarProps {
-  files: FolderChildrenModel[] | undefined
+  files: FolderChildrenModel[]
+  rootId: string
 }
 
 const CodeDiffSidebar = (props: CodeDiffSidebarProps) => {
-  const { files } = props
+  const { files, rootId } = props
 
   return (
     <div className="w-1/6 bg-blue-900 h-full p-2">
@@ -25,6 +28,9 @@ const CodeDiffSidebar = (props: CodeDiffSidebarProps) => {
           )
         })}
       </div>
+      <ComponentRequiresAuth>
+        <ContextMenu />
+      </ComponentRequiresAuth>
     </div>
   )
 }

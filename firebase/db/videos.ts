@@ -41,7 +41,7 @@ export const addVideo = async (videoName: string) => {
   }
 }
 
-export const getVideoDetails = async (companyName: string, videoName: string): Promise<FolderModel | undefined> => {
+export const getVideoDetails = async (companyName: string, videoName: string) => {
   const querySnapshot = await getDocs(collection(db, "users"))
 
   let foundData: VideosModel | undefined
@@ -56,7 +56,7 @@ export const getVideoDetails = async (companyName: string, videoName: string): P
   if (!foundData) return
   const folderData = await getFolder(foundData.rootFolderDocumentId)
 
-  return folderData
+  return { folderData: folderData as FolderModel, rootFolderDocumentId: foundData.rootFolderDocumentId }
 }
 
 export const updateVideo = async (videoName: string, data: VideosModel) => {

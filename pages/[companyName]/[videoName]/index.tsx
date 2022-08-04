@@ -4,17 +4,12 @@ import { codeDiffModel, FolderModel, VideosModel } from "../../../models/userCol
 import { DiffEditor, Monaco } from "@monaco-editor/react"
 import CodeDiffSidebar from "../../../components/CodeDiffSidebar"
 import { refreshDiffData$, snackbarHandler$ } from "../../../rxjs"
-import BasicButton from "../../../components/BasicButton"
 import * as monaco from "monaco-editor"
 import { getVideoDetails, updateVideo } from "../../../firebase/db/videos"
 import DashBoardLoader from "../../../components/DashBoardLoader"
-import ComponentRequiresAuth from "../../../components/ComponentRequiresAuth"
-import { getFileExtension } from "../../../utils/getFileExtension"
-import AddTimestampInput from "../../../components/AddTimestampInput"
-import ContextMenu from "../../../components/ContextMenu"
 
 const VideoDiffPage = () => {
-  const [folder, setFolder] = useState<FolderModel>()
+  const [folderData, setFolderData] = useState<{ folderData: FolderModel; rootFolderDocumentId: string }>()
   const [fileIndex, setCurrentFileIndex] = useState(0)
   const [code, setCurrentCode] = useState<codeDiffModel>()
   const [codeLanguage, setCodeLanguage] = useState("")
@@ -34,7 +29,7 @@ const VideoDiffPage = () => {
     await getVideoDetails(companyName?.toString(), videoName.toString())
       .then((data) => {
         if (!data) return
-        setFolder(data)
+        setFolderData(data)
         setLoading(false)
       })
       .catch((e) => {
@@ -63,12 +58,9 @@ const VideoDiffPage = () => {
   return (
     <div className="h-screen bg-gray-200 flex flex-col justify-around">
       <div className="h-full flex items-center justify-center">
-        <CodeDiffSidebar files={folder?.children} />
+        <CodeDiffSidebar files={folderData?.folderData.children || []} rootId={folderData?.rootFolderDocumentId || ""} />
         <DiffEditor original={code?.codeDiff || ""} width="100%" height="100%" theme="vs-dark" onMount={handleEditorDidMount} language={codeLanguage} />
       </div>
-      <ComponentRequiresAuth>
-        <ContextMenu />
-      </ComponentRequiresAuth>
     </div>
   )
 }
