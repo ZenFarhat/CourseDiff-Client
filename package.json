@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "dotenv -e .env.dev next build",
-    "start": "dotenv -e .env.dev next dev",
+    "start": "dotenv -e .env.dev next dev --open",
     "start:prod": "dotenv -e .env.prod next dev",
     "lint": "next lint",
     "check:types": "tsc --noEmit"

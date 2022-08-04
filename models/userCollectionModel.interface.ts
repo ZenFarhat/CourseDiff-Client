@@ -1,23 +1,11 @@
-export interface Children {
-  type: "folder" | "file"
-  id: string
-  name: string
-  codeDiffs?: codeDiffModel[]
-}
-
 export interface codeDiffModel {
   timeStamp: string
   codeDiff: string
 }
 
-export interface FilesArrayModel {
-  refId: string | null
-  children: Children[]
-}
-
 export interface VideosModel {
   videoName: string
-  files: FilesArrayModel[]
+  rootFolderDocumentId: string
 }
 
 export interface UserInterface {
@@ -25,4 +13,17 @@ export interface UserInterface {
   displayName: string
   companyName: string | null
   videos: VideosModel[]
+}
+
+export interface FolderChildrenModel {
+  type: "file" | "folder"
+  name: string
+  id: string
+  refId?: string
+  codeDiffs?: codeDiffModel[]
+}
+
+export interface FolderModel {
+  parentFolder: string | null
+  children: FolderChildrenModel[]
 }

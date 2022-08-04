@@ -18,8 +18,6 @@ const SnackBar = () => {
       },
     })
 
-    console.log()
-
     return () => snackBarSub.unsubscribe()
   }, [])
 

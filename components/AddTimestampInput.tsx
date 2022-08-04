@@ -16,7 +16,6 @@ const AddTimestampInput = (props: AddTimeStampInputProps) => {
       timeStamp: "",
     },
     onSubmit: () => {
-      console.log(formik.values.timeStamp)
       onClick(formik.values.timeStamp)
     },
     validationSchema: yup.object({
