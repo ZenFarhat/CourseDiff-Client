@@ -9,7 +9,6 @@ interface CodeDiffSidebarProps {
 
 const CodeDiffSidebar = (props: CodeDiffSidebarProps) => {
   const { files } = props
-  const [fileName, setFileName] = useState("")
 
   return (
     <div className="w-1/6 bg-blue-900 h-full p-2">
@@ -19,7 +18,11 @@ const CodeDiffSidebar = (props: CodeDiffSidebarProps) => {
       </div>
       <div>
         {files?.map((item, i) => {
-          return <div key={i}>{item.name}</div>
+          return (
+            <div key={i} id={item.id} className={`${item.type === "folder" ? "bg-yellow-100" : "bg-blue-200"} cursor-pointer`}>
+              {item.name}
+            </div>
+          )
         })}
       </div>
     </div>

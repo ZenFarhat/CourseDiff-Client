@@ -11,6 +11,7 @@ import DashBoardLoader from "../../../components/DashBoardLoader"
 import ComponentRequiresAuth from "../../../components/ComponentRequiresAuth"
 import { getFileExtension } from "../../../utils/getFileExtension"
 import AddTimestampInput from "../../../components/AddTimestampInput"
+import ContextMenu from "../../../components/ContextMenu"
 
 const VideoDiffPage = () => {
   const [folder, setFolder] = useState<FolderModel>()
@@ -60,11 +61,14 @@ const VideoDiffPage = () => {
   }
 
   return (
-    <div className="h-screen p-2 bg-gray-200 flex flex-col justify-around">
+    <div className="h-screen bg-gray-200 flex flex-col justify-around">
       <div className="h-full flex items-center justify-center">
         <CodeDiffSidebar files={folder?.children} />
         <DiffEditor original={code?.codeDiff || ""} width="100%" height="100%" theme="vs-dark" onMount={handleEditorDidMount} language={codeLanguage} />
       </div>
+      <ComponentRequiresAuth>
+        <ContextMenu />
+      </ComponentRequiresAuth>
     </div>
   )
 }
