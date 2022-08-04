@@ -1,13 +1,12 @@
 import { FolderModel } from "./../../models/userCollectionModel.interface"
-import { auth } from "./../index"
 import { db } from ".."
-import { doc, getDoc, collection, addDoc } from "firebase/firestore"
-import { v4 as uuidv4 } from "uuid"
+import { doc, getDoc, collection, addDoc, updateDoc } from "firebase/firestore"
 
-export const addRootFolderToVideo = async (): Promise<string> => {
-  if (!auth.currentUser) return ""
+const dbName = "userFilesAndFolders"
+
+export const addRootFolderToVideo = async () => {
   try {
-    const docRef = collection(db, "userFilesAndFolders")
+    const docRef = collection(db, dbName)
     const newDoc = await addDoc(docRef, {
       parentFolder: null,
       children: [],
@@ -15,11 +14,32 @@ export const addRootFolderToVideo = async (): Promise<string> => {
     return newDoc.id
   } catch (e) {
     console.log(e)
-    return ""
   }
 }
 
-export const getFolder = async (docId: string): Promise<FolderModel | undefined> => {
+export const addNewFolder = async (parentFolderId: string, folderName: string) => {
+  try {
+    const docRef = collection(db, dbName)
+    const newDoc = await addDoc(docRef, {
+      parentFolder: parentFolderId,
+      type: "folder",
+      name: folderName,
+      children: [],
+    })
+
+    const parentDocRef = doc(db, dbName, parentFolderId)
+    const parentDoc = await getDoc(parentDocRef)
+    if (parentDoc.exists()) {
+      const data = parentDoc.data() as FolderModel
+      data.children.push({ docId: newDoc.id, type: "folder", name: folderName })
+      await updateDoc(parentDocRef, { ...data })
+    }
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+export const getFolder = async (docId: string) => {
   try {
     const docRef = doc(db, "userFilesAndFolders", docId)
     const docSnap = await getDoc(docRef)

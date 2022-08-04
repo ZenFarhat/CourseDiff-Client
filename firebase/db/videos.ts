@@ -31,7 +31,7 @@ export const addVideo = async (videoName: string) => {
     if (videoIndex !== -1) return snackbarHandler$.next({ variant: "error", content: `Video ${videoName} already exists!` })
     const userRef = doc(db, "users", auth.currentUser.uid)
     const rootFolder = await addRootFolderToVideo()
-    data.videos.push({ videoName: videoName, rootFolderDocumentId: rootFolder })
+    data.videos.push({ videoName: videoName, rootFolderDocumentId: rootFolder || "" })
     await updateDoc(userRef, { ...data })
     refreshDataSub$.next(true)
     snackbarHandler$.next({ variant: "success", content: `Video ${videoName} added!` })

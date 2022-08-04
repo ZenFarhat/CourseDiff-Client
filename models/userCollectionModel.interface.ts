@@ -18,8 +18,7 @@ export interface UserInterface {
 export interface FolderChildrenModel {
   type: "file" | "folder"
   name: string
-  id: string
-  refId?: string
+  docId?: string
   codeDiffs?: codeDiffModel[]
 }
 
