@@ -21,9 +21,8 @@ const ContextMenu = () => {
 
   return (
     <div className="fixed bg-white p-2 shadow-2xl rounded-xl transition-opacity cursor-pointer z-50" style={{ display: isComponentVisible ? "block" : "none", top: xyPos.y, left: xyPos.x, opacity: isComponentVisible ? "1" : "0" }} ref={ref}>
-      <p>Add Folder</p>
-      <p>Add File</p>
-      <p>Expand All</p>
+      <p>New File</p>
+      <p>New Folder</p>
     </div>
   )
 }
