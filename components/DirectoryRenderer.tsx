@@ -3,6 +3,7 @@ import { useState } from "react"
 import { getFolder } from "../firebase/db/files"
 import { FolderModel } from "../models/userCollectionModel.interface"
 import { snackbarHandler$ } from "../rxjs"
+import { sortDirectories } from "../utils/sortDirectories"
 
 interface DirectoryRendererProps {
   name: string
@@ -57,7 +58,7 @@ const DirectoryRenderer = (props: DirectoryRendererProps) => {
       <div>
         {folderData &&
           expanded &&
-          folderData.children.map((item, i) => {
+          sortDirectories(folderData.children).map((item, i) => {
             return (
               <>
                 <div key={i} className="mr-5">

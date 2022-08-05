@@ -8,6 +8,7 @@ import { addNewFile, addNewFolder } from "../firebase/db/files"
 import { snackbarHandler$ } from "../rxjs"
 import ListFolder from "./DirectoryRenderer"
 import DirectoryRenderer from "./DirectoryRenderer"
+import { sortDirectories } from "../utils/sortDirectories"
 
 interface CodeDiffSidebarProps {
   files: FolderChildrenModel[]
@@ -64,7 +65,7 @@ const CodeDiffSidebar = (props: CodeDiffSidebarProps) => {
         <input type="text" placeholder="Find Timstamp" className="bg-gray-100 text-gray-900 text-sm rounded-tr-xl rounded-br-xl w-full p-2" onChange={(e) => {}} />
       </div>
       <div>
-        {files?.map((item, i) => {
+        {sortDirectories(files).map((item, i) => {
           return (
             <>
               <DirectoryRenderer type={item.type} creatingDirectory={creatingDirectory} name={item.name} key={i} docId={item.docId || ""} onContextMenu={onContextMenu} handleAddFolder={handleAddFolder} folderInfo={folderInfo} onChange={onChange} />
