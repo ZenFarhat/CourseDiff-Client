@@ -4,41 +4,49 @@ import { FolderChildrenModel } from "../models/userCollectionModel.interface"
 import { MagnifyingGlass } from "phosphor-react"
 import ComponentRequiresAuth from "./ComponentRequiresAuth"
 import ContextMenu from "./ContextMenu"
-import { addNewFolder } from "../firebase/db/files"
+import { addNewFile, addNewFolder } from "../firebase/db/files"
 import { snackbarHandler$ } from "../rxjs"
-import ListFolder from "./Folder"
+import ListFolder from "./DirectoryRenderer"
+import DirectoryRenderer from "./DirectoryRenderer"
 
 interface CodeDiffSidebarProps {
   files: FolderChildrenModel[]
   rootId: string
 }
 
-interface FolderDetails {
+interface DirectoryDetails {
   name: string
   parentFolderId: string
+  directoryType: string
 }
 
 const CodeDiffSidebar = (props: CodeDiffSidebarProps) => {
   const { files, rootId } = props
 
-  const [creatingFolder, setCreatingFolder] = useState(false)
-  const [folderInfo, setFolderInfo] = useState<FolderDetails>({ name: "", parentFolderId: rootId })
+  const [creatingDirectory, setCreatingDirectory] = useState(false)
+  const [folderInfo, setFolderInfo] = useState<DirectoryDetails>({ name: "", parentFolderId: rootId, directoryType: "" })
 
   const createFolder = () => {
-    setCreatingFolder(true)
+    setCreatingDirectory(true)
+    setFolderInfo({ ...folderInfo, directoryType: "folder" })
+  }
+
+  const createFile = () => {
+    setCreatingDirectory(true)
+    setFolderInfo({ ...folderInfo, directoryType: "file" })
   }
 
   const handleAddFolder = () => {
-    if (!folderInfo) return
-    addNewFolder(folderInfo?.parentFolderId, folderInfo?.name)
-      .then(() => {
-        snackbarHandler$.next({ variant: "success", content: "Folder Added!" })
-        setCreatingFolder(false)
-        setFolderInfo({ name: "", parentFolderId: rootId })
+    if (folderInfo.directoryType === "folder") {
+      addNewFolder(folderInfo.parentFolderId, folderInfo.name).then(() => {
+        setCreatingDirectory(false)
       })
-      .catch((e) => {
-        snackbarHandler$.next({ variant: "error", content: "Failed to add folder!" })
+    } else if (folderInfo.directoryType === "file") {
+      addNewFile(folderInfo.parentFolderId, folderInfo.name).then(() => {
+        setCreatingDirectory(false)
       })
+    }
+    setFolderInfo({ name: "", parentFolderId: rootId, directoryType: "" })
   }
 
   const onContextMenu = (value: string) => {
@@ -59,8 +67,8 @@ const CodeDiffSidebar = (props: CodeDiffSidebarProps) => {
         {files?.map((item, i) => {
           return (
             <>
-              {item.type === "folder" && <ListFolder creatingFolder={creatingFolder} name={item.name} key={i} docId={item.docId || ""} onContextMenu={onContextMenu} handleAddFolder={handleAddFolder} folderInfo={folderInfo} onChange={onChange} />}
-              {creatingFolder && folderInfo.parentFolderId === item.docId && (
+              <DirectoryRenderer type={item.type} creatingDirectory={creatingDirectory} name={item.name} key={i} docId={item.docId || ""} onContextMenu={onContextMenu} handleAddFolder={handleAddFolder} folderInfo={folderInfo} onChange={onChange} />
+              {creatingDirectory && folderInfo.parentFolderId === item.docId && (
                 <input
                   type="text"
                   className="focus:outline-none bg-blue-800 text-white w-full"
@@ -77,7 +85,7 @@ const CodeDiffSidebar = (props: CodeDiffSidebarProps) => {
           )
         })}
       </div>
-      {creatingFolder && folderInfo.parentFolderId === rootId && (
+      {creatingDirectory && folderInfo.parentFolderId === rootId && (
         <input
           type="text"
           className="focus:outline-none bg-blue-800 text-white w-full"
@@ -91,7 +99,7 @@ const CodeDiffSidebar = (props: CodeDiffSidebarProps) => {
         />
       )}
       <ComponentRequiresAuth>
-        <ContextMenu creatingFolder={createFolder} />
+        <ContextMenu createFile={createFile} createFolder={createFolder} />
       </ComponentRequiresAuth>
     </div>
   )

@@ -4,18 +4,19 @@ import { getFolder } from "../firebase/db/files"
 import { FolderModel } from "../models/userCollectionModel.interface"
 import { snackbarHandler$ } from "../rxjs"
 
-interface ListFolderProps {
+interface DirectoryRendererProps {
   name: string
   onContextMenu: (value: string) => void
   docId: string
-  creatingFolder: boolean
+  creatingDirectory: boolean
   folderInfo: { name: string; parentFolderId: string }
   handleAddFolder: () => void
   onChange: (value: string) => void
+  type: string
 }
 
-const ListFolder = (props: ListFolderProps) => {
-  const { name, onContextMenu, docId, creatingFolder, folderInfo, handleAddFolder, onChange } = props
+const DirectoryRenderer = (props: DirectoryRendererProps) => {
+  const { name, onContextMenu, docId, creatingDirectory, folderInfo, handleAddFolder, onChange, type } = props
   const [folderData, setFolderData] = useState<FolderModel>()
   const [expanded, setExpanded] = useState(false)
 
@@ -31,18 +32,28 @@ const ListFolder = (props: ListFolderProps) => {
       })
   }
 
+  const ChooseDirectoryType = () => {
+    if (type === "folder") {
+      return (
+        <div
+          onContextMenu={() => {
+            onContextMenu(docId)
+          }}
+          className="flex items-center cursor-pointer hover:bg-blue-700 z-50 w-full"
+          onClick={handleFolderClick}
+        >
+          {expanded ? <FolderOpen size={22} color="#fbf4f4" /> : <Folder size={22} color="#fbf4f4" />}
+          <p className="ml-2 text-white">{name}</p>
+        </div>
+      )
+    } else {
+      return <div>{name}</div>
+    }
+  }
+
   return (
     <>
-      <div
-        onContextMenu={() => {
-          onContextMenu(docId)
-        }}
-        className="flex items-center cursor-pointer hover:bg-blue-700 z-50 w-full"
-        onClick={handleFolderClick}
-      >
-        {expanded ? <FolderOpen size={22} color="#fbf4f4" /> : <Folder size={22} color="#fbf4f4" />}
-        <p className="ml-2 text-white">{name}</p>
-      </div>
+      <ChooseDirectoryType />
       <div>
         {folderData &&
           expanded &&
@@ -50,9 +61,9 @@ const ListFolder = (props: ListFolderProps) => {
             return (
               <>
                 <div key={i} className="mr-5">
-                  <ListFolder name={item.name} key={i} docId={item.docId || ""} onContextMenu={onContextMenu} creatingFolder={creatingFolder} folderInfo={folderInfo} handleAddFolder={handleAddFolder} onChange={onChange} />
+                  <DirectoryRenderer type={item.type} name={item.name} key={i} docId={item.docId || ""} onContextMenu={onContextMenu} creatingDirectory={creatingDirectory} folderInfo={folderInfo} handleAddFolder={handleAddFolder} onChange={onChange} />
                 </div>
-                {creatingFolder && folderInfo.parentFolderId === item.docId && (
+                {creatingDirectory && folderInfo.parentFolderId === item.docId && (
                   <input
                     type="text"
                     className="focus:outline-none bg-blue-800 text-white w-full"
@@ -73,4 +84,4 @@ const ListFolder = (props: ListFolderProps) => {
   )
 }
 
-export default ListFolder
+export default DirectoryRenderer

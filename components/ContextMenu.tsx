@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react"
 import useClickOutside from "../hooks/useClickOutside"
 
 interface ContextMenuProps {
-  creatingFolder: () => void
+  createFolder: () => void
+  createFile: () => void
 }
 
 const ContextMenu = (props: ContextMenuProps) => {
   const [xyPos, setXypos] = useState({ x: 0, y: 0 })
   const { ref, isComponentVisible, setIsComponentVisible } = useClickOutside(false)
-  const { creatingFolder } = props
+  const { createFolder, createFile } = props
 
   const customContextMenu = (e: MouseEvent) => {
     e.preventDefault()
@@ -26,10 +27,17 @@ const ContextMenu = (props: ContextMenuProps) => {
 
   return (
     <div className="fixed bg-white p-2 shadow-2xl rounded-xl transition-opacity cursor-pointer z-50" style={{ display: isComponentVisible ? "block" : "none", top: xyPos.y, left: xyPos.x, opacity: isComponentVisible ? "1" : "0" }} ref={ref}>
-      <p>New File</p>
       <p
         onClick={() => {
-          creatingFolder()
+          createFile()
+          setIsComponentVisible(false)
+        }}
+      >
+        New File
+      </p>
+      <p
+        onClick={() => {
+          createFolder()
           setIsComponentVisible(false)
         }}
       >
