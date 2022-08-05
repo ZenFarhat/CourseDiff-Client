@@ -1,4 +1,4 @@
-import { Folder, FolderOpen } from "phosphor-react"
+import { Folder, FolderOpen, File } from "phosphor-react"
 import { useState } from "react"
 import { getFolder } from "../firebase/db/files"
 import { FolderModel } from "../models/userCollectionModel.interface"
@@ -10,14 +10,14 @@ interface DirectoryRendererProps {
   onContextMenu: (value: string) => void
   docId: string
   creatingDirectory: boolean
-  folderInfo: { name: string; parentFolderId: string }
+  directoryInfo: { name: string; parentFolderId: string }
   handleAddFolder: () => void
   onChange: (value: string) => void
   type: string
 }
 
 const DirectoryRenderer = (props: DirectoryRendererProps) => {
-  const { name, onContextMenu, docId, creatingDirectory, folderInfo, handleAddFolder, onChange, type } = props
+  const { name, onContextMenu, docId, creatingDirectory, directoryInfo, handleAddFolder, onChange, type } = props
   const [folderData, setFolderData] = useState<FolderModel>()
   const [expanded, setExpanded] = useState(false)
 
@@ -40,7 +40,7 @@ const DirectoryRenderer = (props: DirectoryRendererProps) => {
           onContextMenu={() => {
             onContextMenu(docId)
           }}
-          className="flex items-center cursor-pointer hover:bg-blue-700 z-50 w-full"
+          className="flex items-center cursor-pointer hover:bg-blue-700 z-50 w-full p-2 border-2 rounded-xl mb-2"
           onClick={handleFolderClick}
         >
           {expanded ? <FolderOpen size={22} color="#fbf4f4" /> : <Folder size={22} color="#fbf4f4" />}
@@ -48,12 +48,17 @@ const DirectoryRenderer = (props: DirectoryRendererProps) => {
         </div>
       )
     } else {
-      return <div>{name}</div>
+      return (
+        <div className="flex items-center cursor-pointer hover:bg-blue-700 z-50 w-full p-2 border-2 rounded-xl mb-2">
+          <File size={22} color="#fbf4f4" />
+          <p className="ml-2 text-white">{name}</p>
+        </div>
+      )
     }
   }
 
   return (
-    <>
+    <div className="z-50">
       <ChooseDirectoryType />
       <div>
         {folderData &&
@@ -62,9 +67,9 @@ const DirectoryRenderer = (props: DirectoryRendererProps) => {
             return (
               <>
                 <div key={i} className="mr-5">
-                  <DirectoryRenderer type={item.type} name={item.name} key={i} docId={item.docId || ""} onContextMenu={onContextMenu} creatingDirectory={creatingDirectory} folderInfo={folderInfo} handleAddFolder={handleAddFolder} onChange={onChange} />
+                  <DirectoryRenderer type={item.type} name={item.name} key={i} docId={item.docId || ""} onContextMenu={onContextMenu} creatingDirectory={creatingDirectory} directoryInfo={directoryInfo} handleAddFolder={handleAddFolder} onChange={onChange} />
                 </div>
-                {creatingDirectory && folderInfo.parentFolderId === item.docId && (
+                {creatingDirectory && directoryInfo.parentFolderId === item.docId && (
                   <input
                     type="text"
                     className="focus:outline-none bg-blue-800 text-white w-full"
@@ -81,7 +86,7 @@ const DirectoryRenderer = (props: DirectoryRendererProps) => {
             )
           })}
       </div>
-    </>
+    </div>
   )
 }
 

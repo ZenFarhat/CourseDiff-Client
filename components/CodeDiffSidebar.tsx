@@ -25,38 +25,40 @@ const CodeDiffSidebar = (props: CodeDiffSidebarProps) => {
   const { files, rootId } = props
 
   const [creatingDirectory, setCreatingDirectory] = useState(false)
-  const [folderInfo, setFolderInfo] = useState<DirectoryDetails>({ name: "", parentFolderId: rootId, directoryType: "" })
+  const [directoryInfo, setDirectoryInfo] = useState<DirectoryDetails>({ name: "", parentFolderId: rootId, directoryType: "" })
 
   const createFolder = () => {
     setCreatingDirectory(true)
-    setFolderInfo({ ...folderInfo, directoryType: "folder" })
+    setDirectoryInfo({ ...directoryInfo, directoryType: "folder" })
   }
 
   const createFile = () => {
     setCreatingDirectory(true)
-    setFolderInfo({ ...folderInfo, directoryType: "file" })
+    setDirectoryInfo({ ...directoryInfo, directoryType: "file" })
   }
 
   const handleAddFolder = () => {
-    if (folderInfo.directoryType === "folder") {
-      addNewFolder(folderInfo.parentFolderId, folderInfo.name).then(() => {
+    if (directoryInfo.directoryType === "folder") {
+      addNewFolder(directoryInfo.parentFolderId, directoryInfo.name).then(() => {
         setCreatingDirectory(false)
       })
-    } else if (folderInfo.directoryType === "file") {
-      addNewFile(folderInfo.parentFolderId, folderInfo.name).then(() => {
+    } else if (directoryInfo.directoryType === "file") {
+      addNewFile(directoryInfo.parentFolderId, directoryInfo.name).then(() => {
         setCreatingDirectory(false)
       })
     }
-    setFolderInfo({ name: "", parentFolderId: rootId, directoryType: "" })
+    setDirectoryInfo({ name: "", parentFolderId: rootId, directoryType: "" })
   }
 
   const onContextMenu = (value: string) => {
-    setFolderInfo({ ...folderInfo, parentFolderId: value })
+    setDirectoryInfo({ ...directoryInfo, parentFolderId: value })
   }
 
   const onChange = (value: string) => {
-    setFolderInfo({ ...folderInfo, name: value })
+    setDirectoryInfo({ ...directoryInfo, name: value })
   }
+
+  console.log(directoryInfo.parentFolderId)
 
   return (
     <div className="w-1/6 bg-blue-900 h-full p-2">
@@ -68,14 +70,14 @@ const CodeDiffSidebar = (props: CodeDiffSidebarProps) => {
         {sortDirectories(files).map((item, i) => {
           return (
             <>
-              <DirectoryRenderer type={item.type} creatingDirectory={creatingDirectory} name={item.name} key={i} docId={item.docId || ""} onContextMenu={onContextMenu} handleAddFolder={handleAddFolder} folderInfo={folderInfo} onChange={onChange} />
-              {creatingDirectory && folderInfo.parentFolderId === item.docId && (
+              <DirectoryRenderer type={item.type} creatingDirectory={creatingDirectory} name={item.name} key={i} docId={item.docId || ""} onContextMenu={onContextMenu} handleAddFolder={handleAddFolder} directoryInfo={directoryInfo} onChange={onChange} />
+              {creatingDirectory && directoryInfo.parentFolderId === item.docId && (
                 <input
                   type="text"
                   className="focus:outline-none bg-blue-800 text-white w-full"
                   autoFocus
                   onChange={(e) => {
-                    setFolderInfo({ ...folderInfo, name: e.target.value })
+                    setDirectoryInfo({ ...directoryInfo, name: e.target.value })
                   }}
                   onKeyDown={(e) => {
                     e.key === "Enter" && handleAddFolder()
@@ -86,13 +88,13 @@ const CodeDiffSidebar = (props: CodeDiffSidebarProps) => {
           )
         })}
       </div>
-      {creatingDirectory && folderInfo.parentFolderId === rootId && (
+      {creatingDirectory && directoryInfo.parentFolderId === rootId && (
         <input
           type="text"
           className="focus:outline-none bg-blue-800 text-white w-full"
           autoFocus
           onChange={(e) => {
-            setFolderInfo({ ...folderInfo, name: e.target.value })
+            setDirectoryInfo({ ...directoryInfo, name: e.target.value })
           }}
           onKeyDown={(e) => {
             e.key === "Enter" && handleAddFolder()
