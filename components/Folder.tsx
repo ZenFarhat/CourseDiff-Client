@@ -24,7 +24,6 @@ const ListFolder = (props: ListFolderProps) => {
     getFolder(docId)
       .then((data) => {
         setFolderData(data)
-        console.log(data)
       })
       .catch((e) => {
         console.log(e)
