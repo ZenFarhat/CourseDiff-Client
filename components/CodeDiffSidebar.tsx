@@ -24,8 +24,6 @@ const CodeDiffSidebar = (props: CodeDiffSidebarProps) => {
   const [creatingFolder, setCreatingFolder] = useState(false)
   const [folderInfo, setFolderInfo] = useState<FolderDetails>({ name: "", parentFolderId: rootId })
 
-  const inputRef = useRef<HTMLInputElement>(null)
-
   const createFolder = () => {
     setCreatingFolder(true)
   }
@@ -43,7 +41,14 @@ const CodeDiffSidebar = (props: CodeDiffSidebarProps) => {
       })
   }
 
-  console.log(folderInfo.parentFolderId)
+  const onContextMenu = (value: string) => {
+    setFolderInfo({ ...folderInfo, parentFolderId: value })
+  }
+
+  const onChange = (value: string) => {
+    setFolderInfo({ ...folderInfo, name: value })
+  }
+
   return (
     <div className="w-1/6 bg-blue-900 h-full p-2">
       <div className="flex justify-center items-center mb-5">
@@ -54,22 +59,10 @@ const CodeDiffSidebar = (props: CodeDiffSidebarProps) => {
         {files?.map((item, i) => {
           return (
             <>
-              {item.type === "folder" && (
-                <>
-                  <ListFolder
-                    name={item.name}
-                    key={i}
-                    docId={item.docId || ""}
-                    onContextMenu={() => {
-                      setFolderInfo({ ...folderInfo, parentFolderId: item.docId || "" })
-                    }}
-                  />
-                </>
-              )}
+              {item.type === "folder" && <ListFolder creatingFolder={creatingFolder} name={item.name} key={i} docId={item.docId || ""} onContextMenu={onContextMenu} handleAddFolder={handleAddFolder} folderInfo={folderInfo} onChange={onChange} />}
               {creatingFolder && folderInfo.parentFolderId === item.docId && (
                 <input
                   type="text"
-                  ref={inputRef}
                   className="focus:outline-none bg-blue-800 text-white w-full"
                   autoFocus
                   onChange={(e) => {
@@ -87,7 +80,6 @@ const CodeDiffSidebar = (props: CodeDiffSidebarProps) => {
       {creatingFolder && folderInfo.parentFolderId === rootId && (
         <input
           type="text"
-          ref={inputRef}
           className="focus:outline-none bg-blue-800 text-white w-full"
           autoFocus
           onChange={(e) => {
