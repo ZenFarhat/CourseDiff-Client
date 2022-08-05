@@ -6,6 +6,7 @@ import ComponentRequiresAuth from "./ComponentRequiresAuth"
 import ContextMenu from "./ContextMenu"
 import { addNewFolder } from "../firebase/db/files"
 import { snackbarHandler$ } from "../rxjs"
+import ListFolder from "./Folder"
 
 interface CodeDiffSidebarProps {
   files: FolderChildrenModel[]
@@ -18,15 +19,15 @@ interface FolderDetails {
 }
 
 const CodeDiffSidebar = (props: CodeDiffSidebarProps) => {
-  const [creatingFolder, setCreatingFolder] = useState(false)
-  const [folderInfo, setFolderInfo] = useState<FolderDetails>({ name: "", parentFolderId: "" })
-
-  const inputRef = useRef<HTMLInputElement>(null)
   const { files, rootId } = props
 
+  const [creatingFolder, setCreatingFolder] = useState(false)
+  const [folderInfo, setFolderInfo] = useState<FolderDetails>({ name: "", parentFolderId: rootId })
+
+  const inputRef = useRef<HTMLInputElement>(null)
+
   const createFolder = () => {
-    setCreatingFolder((value) => !value)
-    inputRef.current?.focus()
+    setCreatingFolder(true)
   }
 
   const handleAddFolder = () => {
@@ -35,6 +36,7 @@ const CodeDiffSidebar = (props: CodeDiffSidebarProps) => {
       .then(() => {
         snackbarHandler$.next({ variant: "success", content: "Folder Added!" })
         setCreatingFolder(false)
+        setFolderInfo({ name: "", parentFolderId: rootId })
       })
       .catch((e) => {
         snackbarHandler$.next({ variant: "error", content: "Failed to add folder!" })
@@ -42,12 +44,7 @@ const CodeDiffSidebar = (props: CodeDiffSidebarProps) => {
   }
 
   return (
-    <div
-      className="w-1/6 bg-blue-900 h-full p-2"
-      onContextMenu={() => {
-        setFolderInfo({ ...folderInfo, parentFolderId: rootId })
-      }}
-    >
+    <div className="w-1/6 bg-blue-900 h-full p-2">
       <div className="flex justify-center items-center mb-5">
         <MagnifyingGlass size={36} className="bg-gray-100 rounded-tl-xl rounded-bl-xl" />
         <input type="text" placeholder="Find Timstamp" className="bg-gray-100 text-gray-900 text-sm rounded-tr-xl rounded-br-xl w-full p-2" onChange={(e) => {}} />
@@ -55,13 +52,38 @@ const CodeDiffSidebar = (props: CodeDiffSidebarProps) => {
       <div>
         {files?.map((item, i) => {
           return (
-            <div key={i} className={`${item.type === "folder" ? "bg-yellow-100" : "bg-blue-200"} cursor-pointer`}>
-              {item.name}
-            </div>
+            <>
+              {item.type === "folder" && (
+                <>
+                  <ListFolder
+                    name={item.name}
+                    key={i}
+                    docId={item.docId || ""}
+                    onContextMenu={() => {
+                      setFolderInfo({ ...folderInfo, parentFolderId: item.docId || "" })
+                    }}
+                  />
+                </>
+              )}
+              {creatingFolder && folderInfo.parentFolderId === item.docId && (
+                <input
+                  type="text"
+                  ref={inputRef}
+                  className="focus:outline-none bg-blue-800 text-white w-full"
+                  autoFocus
+                  onChange={(e) => {
+                    setFolderInfo({ ...folderInfo, name: e.target.value })
+                  }}
+                  onKeyDown={(e) => {
+                    e.key === "Enter" && handleAddFolder()
+                  }}
+                />
+              )}
+            </>
           )
         })}
       </div>
-      {creatingFolder && (
+      {creatingFolder && folderInfo.parentFolderId === rootId && (
         <input
           type="text"
           ref={inputRef}
