@@ -39,8 +39,8 @@ const ListFolder = (props: ListFolderProps) => {
           expanded &&
           folderData.children.map((item, i) => {
             return (
-              <div key={i} className="pr-6">
-                {item.name}
+              <div key={i} className="mr-5">
+                <ListFolder name={item.name} docId={item.docId || ""} onContextMenu={onContextMenu} />
               </div>
             )
           })}

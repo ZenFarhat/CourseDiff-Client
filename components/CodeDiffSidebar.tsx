@@ -43,6 +43,7 @@ const CodeDiffSidebar = (props: CodeDiffSidebarProps) => {
       })
   }
 
+  console.log(folderInfo.parentFolderId)
   return (
     <div className="w-1/6 bg-blue-900 h-full p-2">
       <div className="flex justify-center items-center mb-5">
