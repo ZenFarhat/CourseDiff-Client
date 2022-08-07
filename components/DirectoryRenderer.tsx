@@ -66,7 +66,7 @@ const DirectoryRenderer = (props: DirectoryRendererProps) => {
           sortDirectories(folderData.children).map((item, i) => {
             return (
               <>
-                <div key={i} className="mr-5">
+                <div key={i} className="ml-1">
                   <DirectoryRenderer type={item.type} name={item.name} key={i} docId={item.docId || ""} onContextMenu={onContextMenu} creatingDirectory={creatingDirectory} directoryInfo={directoryInfo} handleAddFolder={handleAddFolder} onChange={onChange} />
                 </div>
                 {creatingDirectory && directoryInfo.parentFolderId === item.docId && (
