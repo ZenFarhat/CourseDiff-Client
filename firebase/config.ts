@@ -5,4 +5,5 @@ export const firebaseConfig = {
   storageBucket: process.env.NEXT_PUBLIC_FB_STORAGEBUCKET,
   messagingSenderId: process.env.NEXT_PUBLIC_FB_MESSAGINGID,
   appId: process.env.NEXT_PUBLIC_FB_APPID,
+  measurementId: process.env.NEXT_PUBLIC_FB_MEASUREMENTID,
 }
