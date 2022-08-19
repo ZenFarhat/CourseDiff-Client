@@ -57,6 +57,9 @@ const VideoDiffPage = () => {
 
   return (
     <div className="h-screen bg-gray-200 flex flex-col justify-around">
+      <nav className="pt-4 px-2 bg-blue-800 flex">
+        <div className="text-white bg-blue-300 flex justify-center items-center rounded-tl-xl rounded-tr-xl cursor-pointer w-28 mx-2">20h2m3s</div>
+      </nav>
       <div className="h-full flex items-center justify-center">
         <CodeDiffSidebar files={folderData?.folderData.children || []} rootId={folderData?.rootFolderDocumentId || ""} />
         <DiffEditor original={code?.codeDiff || ""} width="100%" height="100%" theme="vs-dark" onMount={handleEditorDidMount} language={codeLanguage} />

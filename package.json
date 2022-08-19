@@ -24,7 +24,8 @@
     "react-dom": "18.2.0",
     "rxjs": "^7.5.5",
     "uuidv4": "^6.2.13",
-    "yup": "^0.32.11"
+    "yup": "^0.32.11",
+    "zustand": "^4.1.0"
   },
   "devDependencies": {
     "@types/node": "18.0.0",
