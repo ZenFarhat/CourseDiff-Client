@@ -1,9 +1,10 @@
-import { codeDiffModel, UserInterface, VideosModel } from "./../../models/userCollectionModel.interface"
-import { refreshDataSub$, refreshDiffData$, snackbarHandler$ } from "./../../rxjs/index"
-import { collection, doc, getDocs, updateDoc, setDoc } from "firebase/firestore"
-import { db } from "./../index"
-import { auth } from "./../index"
-import { getUserInfo } from "./users"
+import { collection, doc, getDocs, setDoc, updateDoc } from 'firebase/firestore'
+
+import { db } from './..'
+import { auth } from './..'
+import { IUserVideo, IVideoFile, UserInterface } from './../../models/userCollectionModel.interface'
+import { refreshDataSub$, refreshDiffData$, snackbarHandler$ } from './../../rxjs'
+import { getUserInfo } from './users'
 
 export const deleteVideo = async (videoName: string) => {
   if (!auth.currentUser) return
@@ -21,27 +22,27 @@ export const deleteVideo = async (videoName: string) => {
   }
 }
 
-export const addVideo = async (videoName: string) => {
+export const addVideo = async (videoName: string, fileData: IVideoFile[]) => {
   if (!auth.currentUser) return
   try {
     const data = await getUserInfo(auth.currentUser?.uid)
     const videoIndex = data.videos.findIndex((item) => item.videoName.toLowerCase() === videoName.toLowerCase())
     if (videoIndex !== -1) return snackbarHandler$.next({ variant: "error", content: `Video ${videoName} already exists!` })
     const userRef = doc(db, "users", auth.currentUser.uid)
-    data.videos.push({ videoName: videoName, files: [{ fileName: "index.html", codeDiffs: [{ timeStamp: "0s", codeDiff: "<h1>Hello World</h1>" }] }] })
+    data.videos.push({ videoName: videoName, files: fileData })
     await updateDoc(userRef, { ...data })
     refreshDataSub$.next(true)
     snackbarHandler$.next({ variant: "success", content: `Video ${videoName} added!` })
   } catch (e) {
     console.log(e)
-    snackbarHandler$.next({ variant: "error", content: `Error adding video` })
+    snackbarHandler$.next({ variant: "error", content: `Error adding video, check your json.` })
   }
 }
 
-export const getVideoDetails = async (companyName: string, videoName: string): Promise<VideosModel | undefined> => {
+export const getVideoDetails = async (companyName: string, videoName: string) => {
   const querySnapshot = await getDocs(collection(db, "users"))
 
-  let foundData: VideosModel | undefined
+  let foundData: IUserVideo | undefined
 
   querySnapshot.forEach((doc) => {
     if (doc.data().companyName === companyName) {
@@ -53,7 +54,7 @@ export const getVideoDetails = async (companyName: string, videoName: string): P
   return foundData
 }
 
-export const updateVideo = async (videoName: string, data: VideosModel) => {
+export const updateVideo = async (videoName: string, data: IUserVideo) => {
   if (!auth.currentUser) return
   try {
     const currentUser = await getUserInfo(auth.currentUser.uid)

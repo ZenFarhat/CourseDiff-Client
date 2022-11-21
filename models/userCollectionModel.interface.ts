@@ -1,21 +1,21 @@
-export interface codeDiffModel {
+export interface ICodeDiff {
+  code: string
   timeStamp: string
-  codeDiff: string
 }
 
-export interface FilesArrayModel {
-  fileName: string
-  codeDiffs: codeDiffModel[]
+export interface IVideoFile {
+  filePath: string
+  history: ICodeDiff[]
 }
 
-export interface VideosModel {
+export interface IUserVideo {
   videoName: string
-  files: FilesArrayModel[]
+  files: IVideoFile[]
 }
 
 export interface UserInterface {
   uid: string
   displayName: string
   companyName: string | null
-  videos: VideosModel[]
+  videos: IUserVideo[]
 }

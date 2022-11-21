@@ -1,7 +1,8 @@
-import React, { useRef } from "react"
-import PriceCard from "../components/homeComponents/PriceCard"
-import Image from "next/image"
-import { useInView } from "framer-motion"
+import { useInView } from 'framer-motion'
+import Image from 'next/image'
+import React, { useRef } from 'react'
+
+import PriceCard from '../components/homeComponents/PriceCard'
 
 const Pricing = () => {
   const ref = useRef(null)
@@ -12,7 +13,7 @@ const Pricing = () => {
       <div className="w-11/12 mx-auto">
         <div className="container mx-auto flex flex-wrap justify-between">
           <div className="lg:w-2/6 mb-11 flex flex-col">
-            <h2 className="text-white text-2xl md:text-4xl mb-5">Level up your {"students'"} learning experience with CourseDiff.</h2>
+            <h2 className="text-white text-2xl md:text-4xl mb-5">Level up your {"students'"} learning experience with CodeCorder.</h2>
             <h2 className="text-white text-xl  md:text-3xl mb-5">Join other content creators who aim to provide an overall better, smoother learning experience</h2>
             <h2 className="text-white text-xl  md:text-xl">Choose the plan that best fits you.</h2>
             <div

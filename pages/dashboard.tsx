@@ -1,16 +1,17 @@
-import type { NextPage } from "next"
+import { useEffect, useState } from 'react'
 
-import { useEffect, useState } from "react"
-import BasicButton from "../components/BasicButton"
-import CompanyNameForm from "../components/CompanyNameForm"
-import DashBoardLoader from "../components/DashBoardLoader"
-import SubmitVideoForm from "../components/SubmitVideoForm"
-import VideoDashboardTile from "../components/VideoDashboardTile"
-import { useAuth } from "../contexts/AuthContext"
-import { getUserInfo } from "../firebase/db"
-import { deleteVideo } from "../firebase/db/videos"
-import { UserInterface } from "../models/userCollectionModel.interface"
-import { modalHandler$, refreshDataSub$ } from "../rxjs"
+import BasicButton from '../components/BasicButton'
+import CompanyNameForm from '../components/CompanyNameForm'
+import DashBoardLoader from '../components/DashBoardLoader'
+import SubmitVideoForm from '../components/SubmitVideoForm'
+import VideoDashboardTile from '../components/VideoDashboardTile'
+import { useAuth } from '../contexts/AuthContext'
+import { getUserInfo } from '../firebase/db'
+import { deleteVideo } from '../firebase/db/videos'
+import { UserInterface } from '../models/userCollectionModel.interface'
+import { modalHandler$, refreshDataSub$ } from '../rxjs'
+
+import type { NextPage } from "next"
 
 const Dashboard: NextPage = () => {
   const { user, updateCompanyContext } = useAuth()

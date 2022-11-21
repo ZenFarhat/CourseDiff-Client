@@ -1,4 +1,4 @@
-import * as Yup from "yup"
+import * as Yup from 'yup'
 
 const testForSlashes = (file: string) => {
   const regex = /\/|\\/
@@ -27,21 +27,11 @@ export const companyNameValidation = Yup.string()
   .test("no-spaces", "No spaces allowed", (value) => !value?.includes(" "))
   .test("no-slashes", "No slashes allowed", (value) => !testForSlashes(value || ""))
 
-const isValidTime = (time: string) => {
-  const regex = /^([1-9]{1}([0-9]+)?h)?([1-5]{1}([0-9]{1})?m)?([1-5]{1}([0-9]{1})?s)?$/
-  return regex.test(time)
-}
-
-export const timeStampValidation = Yup.string()
-  .required("Please enter a timestamp")
-  .test("valid-timestamp", "Please check if this is a valid timstamp", (value) => isValidTime(value as string))
-
-const isValidFile = (file: string) => {
-  const regex = /\..*[^\.]$/
-  return regex.test(file)
-}
-
-export const fileValidation = Yup.string()
-  .required("Please enter a file name")
-  .test("valid-file", "file requires extension", (value) => isValidFile(value as string))
-  .test("no-spaces", "No spaces allowed", (value) => !value?.includes(" "))
+export const jsonInputValidation = Yup.string().test("json", "Invalid json", (value) => {
+  try {
+    JSON.parse(value || "")
+    return true
+  } catch (e) {
+    return false
+  }
+})

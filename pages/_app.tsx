@@ -1,14 +1,16 @@
-import "../styles/globals.css"
-import type { AppProps } from "next/app"
-import { AuthContextProvider } from "../contexts/AuthContext"
-import { useRouter } from "next/router"
-import ProtectedRoute from "../components/ProtectedRoute"
-import DashboardLayout from "../components/DashboardLayout"
-import ModalLayout from "../components/ModalLayout"
-import LoadingSpinner from "../components/LoadingSpinner"
-import SnackBar from "../components/SnackBar"
-import Head from "next/head"
+import '../styles/globals.css'
 
+import Head from 'next/head'
+import { useRouter } from 'next/router'
+
+import DashboardLayout from '../components/DashboardLayout'
+import LoadingSpinner from '../components/LoadingSpinner'
+import ModalLayout from '../components/ModalLayout'
+import ProtectedRoute from '../components/ProtectedRoute'
+import SnackBar from '../components/SnackBar'
+import { AuthContextProvider } from '../contexts/AuthContext'
+
+import type { AppProps } from "next/app"
 const noAuthRequired = ["/login", "/signup", "/", "/[companyName]/[videoName]", "/pricing", "/features"]
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -17,7 +19,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>CourseDiff</title>
+        <title>CodeCorder</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <meta name="description" content="The only tool you need to improve your course delivery experience." />
       </Head>

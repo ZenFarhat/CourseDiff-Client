@@ -1,7 +1,8 @@
-import { useRouter } from "next/router"
-import React from "react"
-import BasicButton from "../components/BasicButton"
-import { useAuth } from "../contexts/AuthContext"
+import { useRouter } from 'next/router'
+import React from 'react'
+
+import BasicButton from '../components/BasicButton'
+import { useAuth } from '../contexts/AuthContext'
 
 const Nav = () => {
   const router = useRouter()
@@ -9,7 +10,7 @@ const Nav = () => {
 
   return (
     <nav className="mx-auto flex justify-between items-center py-4 px-8 container">
-      <p className="font-bold text-xl">CourseDiff</p>
+      <p className="font-bold text-xl">CodeCorder</p>
       <div>
         <BasicButton
           buttonText={user ? "Go to Dashboard" : "Go to login"}

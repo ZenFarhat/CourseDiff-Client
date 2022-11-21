@@ -1,7 +1,8 @@
-import { db } from ".."
-import { doc, getDoc, setDoc, updateDoc, getDocs, collection } from "firebase/firestore"
-import { UserInterface } from "../../models/userCollectionModel.interface"
-import { loadingHandler$, refreshDataSub$, snackbarHandler$ } from "../../rxjs"
+import { collection, doc, getDoc, getDocs, setDoc, updateDoc } from 'firebase/firestore'
+
+import { db } from '..'
+import { UserInterface } from '../../models/userCollectionModel.interface'
+import { loadingHandler$, refreshDataSub$, snackbarHandler$ } from '../../rxjs'
 
 export const getUserInfo = async (id: string): Promise<UserInterface> => {
   const docRef = doc(db, "users", id)
@@ -13,17 +14,6 @@ export const getUserInfo = async (id: string): Promise<UserInterface> => {
     await setDoc(doc(db, "users", id), {
       uid: id,
       companyName: null,
-      videos: [
-        {
-          videoName: "html-css crash course",
-          files: [
-            {
-              fileName: "index.html",
-              codeDiffs: [{ timeStamp: "0s", codeDiff: "<h1>Hello World</h1>" }],
-            },
-          ],
-        },
-      ],
     })
 
     const docRefNew = doc(db, "users", id)
